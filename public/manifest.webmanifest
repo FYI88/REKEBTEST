@@ -1,0 +1,15 @@
+{
+  "name": "Rkeb — Covoiturage ENSA Tanger",
+  "short_name": "Rkeb",
+  "description": "Même route, même école, 5 dirhams. Covoiturage étudiant vérifié pour l'ENSA Tanger.",
+  "lang": "fr",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f1e3",
+  "theme_color": "#2a8f93",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/rkeb-app-icon.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}

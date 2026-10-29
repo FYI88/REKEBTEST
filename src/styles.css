@@ -1,0 +1,171 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Direction: "Billet de Tanger" — cream paper, ink, petit-taxi teal, saffron stamps. */
+@theme inline {
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-sans: "Instrument Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--muted);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--primary-foreground);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-overlay: var(--overlay);
+  --color-avatar-1: var(--avatar-1);
+  --color-avatar-2: var(--avatar-2);
+  --color-avatar-3: var(--avatar-3);
+  --color-avatar-4: var(--avatar-4);
+  --color-avatar-5: var(--avatar-5);
+  --shadow-hard: 4px 4px 0 var(--ink);
+  --shadow-hard-sm: 2px 2px 0 var(--ink);
+}
+
+:root {
+  --background: oklch(0.965 0.018 85);
+  --foreground: oklch(0.2 0.02 60);
+  --card: oklch(0.99 0.008 85);
+  --muted: oklch(0.93 0.022 85);
+  --muted-foreground: oklch(0.48 0.025 70);
+  --border: oklch(0.2 0.02 60);
+  --primary: oklch(0.52 0.1 190);
+  --primary-foreground: oklch(0.99 0.008 85);
+  --primary-soft: oklch(0.9 0.045 190);
+  --accent: oklch(0.83 0.16 80);
+  --accent-foreground: oklch(0.22 0.03 60);
+  --destructive: oklch(0.54 0.2 30);
+  --destructive-soft: oklch(0.92 0.05 30);
+  --ink: oklch(0.2 0.02 60);
+  --ink-foreground: oklch(0.965 0.018 85);
+  --ink-muted: oklch(0.75 0.02 80);
+  --success: oklch(0.52 0.13 150);
+  --success-soft: oklch(0.91 0.06 150);
+  --overlay: oklch(0.2 0.02 60 / 60%);
+  --avatar-1: oklch(0.85 0.08 190);
+  --avatar-2: oklch(0.86 0.12 80);
+  --avatar-3: oklch(0.84 0.08 30);
+  --avatar-4: oklch(0.85 0.07 300);
+  --avatar-5: oklch(0.86 0.09 140);
+}
+
+/* Thème ENSA (opt-in via le toggle, jamais par défaut) — bloc supprimable pour revenir au thème unique. */
+.theme-ensa {
+  --background: #f1f6fa;
+  --foreground: #102840;
+  --card: #fbfdfe;
+  --muted: #dde6ee;
+  --muted-foreground: #596571;
+  --border: #102840;
+  --primary: #2a6aa8;
+  --primary-foreground: #f1f6fa;
+  --primary-soft: #cee4fc;
+  --accent: #e79d19;
+  --accent-foreground: #102840;
+  --ink: #102840;
+  --ink-foreground: #f1f6fa;
+  --ink-muted: #aeb9c4;
+  --success: #2f7d20;
+  --success-soft: oklch(0.92 0.05 145);
+  --overlay: oklch(0.27 0.055 252 / 60%);
+  --avatar-1: #acd2fb;
+  --avatar-2: #fac871;
+  --avatar-3: #9dd6e0;
+  --avatar-4: #a6d1ff;
+  --avatar-5: #a7e2b2;
+}
+
+/* Thème Nuit (opt-in) — même langage « billet », encre claire sur papier sombre. */
+.theme-nuit {
+  color-scheme: dark;
+  --background: oklch(0.18 0.018 250);
+  --foreground: oklch(0.95 0.015 85);
+  --card: oklch(0.23 0.02 250);
+  --muted: oklch(0.29 0.02 250);
+  --muted-foreground: oklch(0.74 0.02 80);
+  --border: oklch(0.76 0.03 85);
+  --primary: oklch(0.74 0.11 190);
+  --primary-foreground: oklch(0.16 0.015 250);
+  --primary-soft: oklch(0.32 0.05 190);
+  --accent: oklch(0.83 0.16 80);
+  --accent-foreground: oklch(0.2 0.03 60);
+  --destructive: oklch(0.7 0.18 30);
+  --destructive-soft: oklch(0.32 0.07 30);
+  --ink: oklch(0.76 0.03 85);
+  --ink-foreground: oklch(0.16 0.015 250);
+  --ink-muted: oklch(0.33 0.02 250);
+  --success: oklch(0.78 0.14 150);
+  --success-soft: oklch(0.3 0.06 150);
+  --overlay: oklch(0 0 0 / 65%);
+  --avatar-1: oklch(0.42 0.07 190);
+  --avatar-2: oklch(0.45 0.08 80);
+  --avatar-3: oklch(0.42 0.08 30);
+  --avatar-4: oklch(0.42 0.08 300);
+  --avatar-5: oklch(0.42 0.08 140);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: radial-gradient(color-mix(in oklab, var(--ink) 9%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  button, a, select, label { cursor: pointer; }
+}
+
+@utility hard { box-shadow: var(--shadow-hard); }
+@utility hard-sm { box-shadow: var(--shadow-hard-sm); }
+@utility press {
+  transition: transform .12s, box-shadow .12s;
+  &:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+}
+@utility perforated {
+  background-image: linear-gradient(to bottom, var(--ink) 50%, transparent 50%);
+  background-size: 1.5px 10px;
+  background-repeat: repeat-y;
+}
+@utility stamp { transform: rotate(-7deg); }
+@utility marquee {
+  animation: marquee 28s linear infinite;
+}
+@utility reveal {
+  animation: reveal .5s cubic-bezier(.2, .7, .2, 1) both;
+}
+@keyframes reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

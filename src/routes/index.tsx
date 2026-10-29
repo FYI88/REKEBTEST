@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Landing } from "@/components/screens";
+export const Route = createFileRoute("/")({head:()=>({meta:[{title:"ENSA Carpool — Le covoiturage étudiant à Tanger"},{name:"description",content:"Le covoiturage vérifié et abordable pour la communauté ENSA Tanger."},{property:"og:title",content:"ENSA Carpool — Le covoiturage étudiant à Tanger"},{property:"og:description",content:"Le covoiturage vérifié et abordable pour la communauté ENSA Tanger."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Landing});
