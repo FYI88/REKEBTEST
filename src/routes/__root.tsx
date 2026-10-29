@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { useStore } from "../lib/store";
 import { Toaster } from "../components/ui/sonner";
+import { NativeBackButton, OfflineBanner } from "../components/native-shell";
 
 const homeLink = "press hard-sm inline-flex h-12 items-center justify-center rounded-md border-2 border-ink bg-primary px-5 text-sm font-bold text-primary-foreground";
 const ghostLink = "press hard-sm inline-flex h-12 items-center justify-center rounded-md border-2 border-ink bg-card px-5 text-sm font-bold";
@@ -126,6 +127,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeApplier />
+      <NativeBackButton />
+      <OfflineBanner />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="top-center" toastOptions={{ classNames: { toast: "!rounded-lg !border-2 !border-ink !bg-card !font-bold !text-foreground" } }} />

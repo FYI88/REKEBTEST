@@ -187,6 +187,9 @@
 .theme-nuit .site-footer a:hover { color: #f0b08d; }
 .theme-nuit .site-footer a:focus-visible { outline-color: #f0b08d; }
 
+.route-sketch { --route: #b75d35; }
+.theme-nuit .route-sketch { --route: #f0b08d; }
+
 /* Temporary footer comparison variant. */
 .site-footer.site-footer-postcard { background: #082d30; color: #f4ebd3; }
 .site-footer-postcard .site-footer-heading { font-family: var(--font-display); font-weight: 800; }

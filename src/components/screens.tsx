@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, Clock, Coins, Eye, EyeOff, Flag, Fuel, Gauge, Megaphone, Navigation as NavIcon, UserX, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
 import { toast } from "sonner";
+import { RouteSketch } from "@/components/route-sketch";
 import { leaderboard, rechargeRequests, reviews, seedReports, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Report, type Review, type Trip } from "@/lib/demo-data";
 import { bookSeat, cancelBooking, rateTrip, requestRecharge, useMyBookings, useMyWallet, useTrip } from "@/lib/db";
 import { COTISATION_DH, COTISATION_GROUP_ID, chatFor, findDemoTrip, ledgerEntry, resetDemo, setStore, useStore, type Pay } from "@/lib/store";
@@ -121,18 +122,6 @@ function AuthFrame({ children }: { children: React.ReactNode }) {
 }
 
 /* ---------- RIDE DETAIL ---------- */
-function RouteMap({ stops }: { stops: string[] }) {
-  return <div className="relative h-56 overflow-hidden rounded-lg border-2 border-ink bg-primary-soft">
-    <svg viewBox="0 0 400 220" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
-      <path d="M0 160 Q120 120 200 150 T400 110" stroke="currentColor" className="text-card" strokeWidth="22" fill="none" />
-      <path d="M60 0 L110 220 M290 0 L250 220" stroke="currentColor" className="text-card" strokeWidth="12" />
-      <path d="M40 180 C110 150 140 70 220 90 S330 60 360 40" stroke="currentColor" className="text-ink" strokeWidth="4" strokeDasharray="10 7" fill="none" />
-    </svg>
-    {stops.map((s, i) => { const x = 10 + (i * 55) / Math.max(1, stops.length - 1 || 1); const y = 78 - i * 18; return <span key={s} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${stops.length === 1 ? 10 : x}%`, top: `${y}%` }}><span className="grid h-7 w-7 place-items-center rounded-full border-2 border-ink bg-card font-mono text-[11px] font-bold">{i + 1}</span></span>; })}
-    <span className="absolute right-[8%] top-[18%] -translate-y-1/2 rounded-md border-2 border-ink bg-accent px-2 py-1 font-mono text-[10px] font-bold">ENSA</span>
-    <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded-sm border-[1.5px] border-ink bg-card px-2 py-0.5 font-mono text-[10px] font-bold"><Radio size={11} className="text-destructive" />GPS · itinéraire multi pickups</span>
-  </div>;
-}
 const routeLabel = (t: Pick<Trip, "slot" | "from">) => (t.slot === "Matin" ? `${t.from} → ENSA` : `ENSA → ${t.from}`);
 
 export function RideDetail({ rideId }: { rideId: string }) {
@@ -219,7 +208,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
           <div><p className="font-mono text-xs font-bold uppercase text-muted-foreground">{t.date} · {t.vehicle}</p><h1 className="font-display text-5xl font-extrabold tracking-tight">{t.time} <span className="text-primary">→</span> {t.arrival}</h1><p className="mt-1 text-sm font-semibold">{routeLabel(t)}</p></div>
           <Tag className="bg-accent text-accent-foreground"><Clock size={11} />Alerte retard activée</Tag>
         </div>
-        <RouteMap stops={t.pickups ?? []} />
+        <RouteSketch from={t.from} stops={t.pickups ?? []} evening={t.slot === "Soir"} />
         <div className="rounded-lg border-2 border-ink bg-card p-5">
           <h2 className="font-display text-xl font-extrabold">Choisis ton pickup</h2>
           <div className="mt-3 grid gap-2">{(t.pickups ?? []).map((p, i) => <label key={p} className="flex items-center gap-3 rounded-md border-2 border-ink p-3 has-[:checked]:bg-primary-soft">
