@@ -121,3 +121,17 @@ export const faq = [
   { q: "Que fait le bouton SOS ?", a: "Il partage ta position avec ton contact d’urgence et l’administration ENSA. Tu peux aussi partager le lien du trajet à un proche." },
   { q: "Je n’ai pas de compte, je peux essayer ?", a: "Oui : le mode démo (persona Amine) rend toute l’app cliquable sans compte ni connexion réseau." },
 ] as const;
+
+export const driverSteps = [
+  { n: "1", title: "Crée ton compte conducteur", body: "Même vérification que les passagers : email ENSA, CNE ou matricule, validation admin." },
+  { n: "2", title: "Publie ton trajet", body: "Quartier, heure, places, pickups sur ta route. Récurrent du lundi au vendredi si tu veux." },
+  { n: "3", title: "Remplis tes places", body: "Les passagers vérifiés réservent à 5 DH. Tu les croises au pickup, QR à l’appui." },
+  { n: "4", title: "Gagne essence et points", body: "5 DH par place, 10 éco-points par passager, et ta place dans le classement des top helpers." },
+] as const;
+
+export const trustPoints = [
+  { title: "Profil vérifié", body: "CNE ou matricule, email @etu.uae.ac.ma ou @uae.ac.ma et carte étudiante contrôlés par l’admin." },
+  { title: "Numéro masqué", body: "Le chat du trajet te permet de te coordonner sans jamais partager ton téléphone." },
+  { title: "SOS et partage live", body: "Un bouton alerte ton contact d’urgence et l’administration, un lien permet à un proche de te suivre." },
+  { title: "Avis et notes", body: "Chaque trajet se note. Les conducteurs fiables remontent, les autres disparaissent." },
+] as const;

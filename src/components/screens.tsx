@@ -1,127 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, ChevronDown, Clock, Coins, Eye, EyeOff, Fuel, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Play, Quote, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, Clock, Coins, Eye, EyeOff, Fuel, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
 import { toast } from "sonner";
-import { faq, howItWorks, leaderboard, platformStats, rechargeRequests, reviews, testimonials, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Review, type Trip } from "@/lib/demo-data";
+import { leaderboard, rechargeRequests, reviews, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Review, type Trip } from "@/lib/demo-data";
 import { bookSeat, cancelBooking, rateTrip, requestRecharge, useMyBookings, useMyWallet, useTrip } from "@/lib/db";
 import { chatFor, findDemoTrip, ledgerEntry, resetDemo, setStore, useStore, visibleDemoTrips, type Pay } from "@/lib/store";
 import { formatMinutes, impactFor } from "@/lib/impact";
 import { addMinutes, clockNow, demoReply, qrFor } from "@/lib/trip-utils";
 import { friendlyAuthError, sendEmailCode, signInWithPassword, signOutUser, signUpWithPassword, useAuth, useIdentity, verifyEmailCode } from "@/lib/auth";
-import { AppShell, Avatar, SeatDots, ThemeToggle, TripCard } from "@/components/prototype";
+import { AppShell, Avatar, SeatDots, TripCard } from "@/components/prototype";
 import { Button, EmptyState, Field, inputClass, Logo, Modal, Stamp, Tag } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import campus from "@/assets/campus-carpool.jpg";
 
-/* ---------- LANDING ---------- */
-export function Landing() {
-  const nav = useNavigate();
-  const ticker = ["5 DH le trajet", "Vérifié CNE + @etu.uae.ac.ma", "Réservation la veille", "Voiture ou moto", "Profs et personnel bienvenus", "Bouton SOS", "Cotisation essence"];
-  const tryDemo = () => { setStore(() => ({ demoMode: true })); nav({ to: "/app" }); };
-  return <div className="min-h-screen overflow-x-hidden">
-    <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-      <Logo />
-      <div className="flex items-center gap-2"><ThemeToggle /><Link to="/login"><Button variant="paper" className="h-10">Connexion</Button></Link><Link to="/signup" className="hidden sm:block"><Button variant="ink" className="h-10">Rejoindre</Button></Link></div>
-    </header>
-    <main>
-    <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-14 pt-6 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-      <div className="reveal">
-        <Tag className="bg-primary-soft">Réservé à la communauté ENSA Tanger</Tag>
-        <h1 className="mt-5 font-display text-[clamp(3rem,7.5vw,6rem)] font-extrabold leading-[.85] tracking-tight">Réveil à 6h,<br />arrivée à 8h&nbsp;?<br /><span className="relative inline-block text-primary">C’est fini.<svg aria-hidden="true" className="absolute -bottom-3 left-0 w-full" viewBox="0 0 300 14" fill="none"><path d="M3 10C80 2 200 2 297 8" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg></span></h1>
-        <p className="mt-7 max-w-lg text-lg">Ceux qui ont une voiture ou une moto partent déjà vers l’ENSA. Remplis leurs places vides, ils remplissent leur réservoir. <b>Tout le monde gagne une heure.</b></p>
-        <div className="mt-8 flex flex-wrap gap-3"><Link to="/signup"><Button className="h-14 px-7 text-base">Créer mon compte <ArrowRight size={18} /></Button></Link><Button variant="paper" className="h-14 px-7 text-base" onClick={tryDemo}><Play size={16} />Essayer sans compte</Button></div>
-        <p className="mt-3 font-mono text-[11px] uppercase text-muted-foreground">Mode démo instantané · aucune inscription</p>
-      </div>
-      <div className="reveal relative" style={{ animationDelay: "120ms" }}>
-        <div className="rotate-2 overflow-hidden rounded-xl border-2 border-ink hard"><img src={campus} alt="Étudiants qui partagent une voiture vers le campus" width={1536} height={1024} className="aspect-[4/3] w-full object-cover" /></div>
-        <Stamp className="absolute -bottom-8 -left-4 h-32 w-32 text-4xl sm:-left-8">5 DH<span className="block font-mono text-[9px] tracking-widest">PRIX FIXE</span></Stamp>
-        <div className="absolute -right-2 -top-6 -rotate-3 rounded-lg border-2 border-ink bg-card p-3 hard-sm">
-          <p className="font-mono text-[10px] font-bold uppercase text-muted-foreground">Demain · 07:25</p>
-          <p className="font-display text-lg font-extrabold">Boukhalef → ENSA</p><SeatDots trip={trips[0]} />
-        </div>
-      </div>
-    </section>
-    <div className="overflow-hidden border-y-2 border-ink bg-ink py-3 text-ink-foreground" aria-hidden="true"><div className="marquee flex w-max gap-10 font-display text-xl font-bold">{[...ticker, ...ticker].map((t, i) => <span key={i} className="flex items-center gap-10">{t}<span className="text-accent">✺</span></span>)}</div></div>
-    <section aria-label="Chiffres clés" className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-5 pt-12 md:grid-cols-4">
-      {platformStats.map((st) => <div key={st.label} className="rounded-xl border-2 border-ink bg-card p-5 text-center hard-sm"><p className="font-display text-4xl font-extrabold text-primary">{st.value}</p><p className="mt-1 font-mono text-[10px] font-bold uppercase text-muted-foreground">{st.label}</p></div>)}
-    </section>
-    <section className="mx-auto max-w-6xl px-5 pt-16">
-      <p className="font-mono text-xs font-bold uppercase text-muted-foreground">Notre questionnaire · 4 problèmes réels</p>
-      <h2 className="mt-2 font-display text-4xl font-extrabold">Pourquoi Rkeb existe.</h2>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          ["01", "Bus bondés et retards", "Manque de transport à certaines heures, arriver à l'heure devient un exploit."],
-          ["02", "Horaires décalés", "Les bus ne suivent pas l'emploi du temps, les correspondances compliquent tout."],
-          ["03", "Trop cher, zéro info", "Budget étudiant serré, aucune info temps réel, des heures d'attente."],
-          ["04", "Stress et fatigue", "L'accumulation au quotidien épuise avant même le premier cours."],
-        ].map(([n, t, d]) => <article key={n as string} className="rounded-xl border-2 border-ink bg-card p-5 hard-sm">
-          <span className="font-mono text-sm font-bold text-primary">{n as string}</span>
-          <h3 className="mt-3 font-display text-xl font-extrabold">{t as string}</h3><p className="mt-1 text-sm text-muted-foreground">{d as string}</p>
-        </article>)}
-      </div>
-    </section>
-    <section className="mx-auto grid max-w-6xl gap-4 px-5 py-16 md:grid-cols-3">
-      {[
-        ["01", "Sans voiture", "Tu arrives à l’heure, reposé·e, pour le prix d’un café. Plus de bus bondé ni de taxi à 30 DH.", Users],
-        ["02", "Avec voiture ou moto", "Tu fais déjà le trajet. Des places pleines = essence remboursée + éco-points + classement des top helpers.", Car],
-        ["03", "En confiance", "Chaque membre est validé par l’admin : CNE, email institutionnel et carte étudiante. Notation, partage live et SOS.", ShieldCheck],
-      ].map(([n, t, d, I]) => { const Icon = I as typeof Car; return <article key={n as string} className="rounded-xl border-2 border-ink bg-card p-6 hard-sm odd:-rotate-1 even:rotate-1">
-        <div className="flex items-center justify-between"><span className="font-mono text-sm font-bold text-primary">{n as string}</span><Icon /></div>
-        <h3 className="mt-8 font-display text-2xl font-extrabold">{t as string}</h3><p className="mt-2 text-sm text-muted-foreground">{d as string}</p>
-      </article>; })}
-    </section>
-    <section className="mx-auto max-w-6xl px-5 pb-16">
-      <p className="font-mono text-xs font-bold uppercase text-muted-foreground">En 4 étapes</p>
-      <h2 className="mt-2 font-display text-4xl font-extrabold">Comment ça marche.</h2>
-      <ol className="mt-6 grid gap-4 md:grid-cols-4">
-        {howItWorks.map((st) => <li key={st.n} className="relative rounded-xl border-2 border-ink bg-card p-5 hard-sm">
-          <span className="grid h-10 w-10 place-items-center rounded-full border-2 border-ink bg-accent font-display text-lg font-extrabold text-accent-foreground">{st.n}</span>
-          <h3 className="mt-4 font-display text-xl font-extrabold">{st.title}</h3><p className="mt-1 text-sm text-muted-foreground">{st.body}</p>
-        </li>)}
-      </ol>
-    </section>
-    <section className="mx-auto max-w-6xl px-5 pb-16">
-      <div className="grid gap-6 rounded-xl border-2 border-ink bg-primary p-7 text-primary-foreground hard md:grid-cols-4 md:p-10">
-        <h2 className="font-display text-4xl font-extrabold leading-none md:col-span-1">Trois façons de payer.</h2>
-        {[["Wallet DH", "Débit auto de 5 DH, recharge cash au guichet. Remboursé si le conducteur annule."], ["Carte de points", "Tu conduis souvent ? Tes points paient tes trajets passagers."], ["Cotisation essence", "Le groupe se partage le plein de la semaine. Encore moins cher."]].map(([t, d]) =>
-          <div key={t} className="rounded-lg border-2 border-ink bg-card p-4 text-foreground"><p className="font-display text-xl font-extrabold">{t}</p><p className="mt-1 text-sm text-muted-foreground">{d}</p></div>)}
-      </div>
-    </section>
-    <section className="mx-auto max-w-6xl px-5 pb-16">
-      <h2 className="font-display text-4xl font-extrabold">Ils roulent déjà ensemble.</h2>
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        {testimonials.map((t) => <figure key={t.name} className="rounded-xl border-2 border-ink bg-card p-5 hard-sm">
-          <Quote size={20} className="text-primary" />
-          <blockquote className="mt-3 text-sm">{t.text}</blockquote>
-          <figcaption className="mt-4 font-mono text-[11px] font-bold uppercase">{t.name} <span className="text-muted-foreground">· {t.who}</span></figcaption>
-        </figure>)}
-      </div>
-    </section>
-    <section className="mx-auto max-w-3xl px-5 pb-16">
-      <h2 className="font-display text-4xl font-extrabold">Questions fréquentes.</h2>
-      <div className="mt-6 grid gap-3">
-        {faq.map((f) => <details key={f.q} className="group rounded-lg border-2 border-ink bg-card p-4 open:hard-sm">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-display text-lg font-extrabold">{f.q}<ChevronDown size={18} className="shrink-0 transition group-open:rotate-180" /></summary>
-          <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
-        </details>)}
-      </div>
-    </section>
-    <section className="mx-auto max-w-6xl px-5 pb-20">
-      <div className="relative overflow-hidden rounded-xl border-2 border-ink bg-ink p-8 text-center text-ink-foreground hard md:p-12">
-        <h2 className="font-display text-4xl font-extrabold md:text-5xl">Prochain départ : demain, 07:25.</h2>
-        <p className="mx-auto mt-3 max-w-lg text-ink-muted">Rejoins la ligne ou explore d’abord l’app avec le profil de démo.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3"><Link to="/signup"><Button variant="accent" className="h-14 px-7 text-base">Créer mon compte</Button></Link><Button variant="paper" className="h-14 px-7 text-base" onClick={tryDemo}>Mode démo</Button></div>
-      </div>
-    </section>
-    </main>
-    <footer className="border-t-2 border-ink px-5 py-8"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 font-mono text-xs text-muted-foreground">
-      <span>Prototype étudiant · ENSA Tanger · Design thinking 2026</span>
-      <nav aria-label="Pied de page" className="flex gap-4 font-bold uppercase"><Link to="/login">Connexion</Link><Link to="/signup">Inscription</Link><Link to="/app">Trajets</Link><Link to="/admin">Admin</Link></nav>
-    </div></footer>
-  </div>;
-}
+
 /* ---------- AUTH ---------- */
 export function Auth({ signup = false }: { signup?: boolean }) {
   const nav = useNavigate();
