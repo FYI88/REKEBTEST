@@ -4,7 +4,7 @@
 
 ## Demo-day checkpoint — footer, information pages and Android
 
-- Android release checkpoint: `v0.1.0-demo.3`, version code 3, rebuilt with both footer styles. Release target: `FYI88/REKEBTEST`; stable APK URL: https://github.com/FYI88/REKEBTEST/releases/latest/download/rkeb-android.apk. Website mobile landing action bar and footer include APK Android links below 768px; `AndroidDownload` hides itself in native Capacitor. Release constants: `src/lib/app-release.ts`. Keep `rkeb-android.apk` as the asset name and mark the release Latest (demo status is documented in its title/notes).
+- Android release checkpoint: **published** `v0.1.0-demo.3`, version code 3, rebuilt with both footer styles. Release: https://github.com/FYI88/REKEBTEST/releases/tag/v0.1.0-demo.3 (tag points to `41060c7`). Stable APK URL: https://github.com/FYI88/REKEBTEST/releases/latest/download/rkeb-android.apk — verified HTTP 200, 5,420,009 bytes, GitHub SHA256 matches local APK. Website mobile landing action bar and footer include APK Android links below 768px; `AndroidDownload` hides itself in native Capacitor. Release constants: `src/lib/app-release.ts`. Keep `rkeb-android.apk` as the asset name and mark the release Latest (demo status is documented in its title/notes). Website source pushed to REKEBTEST; no hosted website deployment was confirmed/configured in this repository.
 
 - Temporary footer comparison: small **Journal / Carte postale** buttons switch the entire footer treatment (artwork, palette, heading typography, caption, logo). Journal is the default; choice is local component state and resets on remount. Remove the explicitly marked control/state and `.site-footer-postcard` comparison styles after choosing a direction.
 
