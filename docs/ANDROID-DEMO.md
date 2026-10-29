@@ -2,7 +2,11 @@
 
 ## Install the APK
 
-Current download: [v0.1.0-demo.2 — branded Rkeb icon](https://github.com/FYI88/RKEBPROJECT/releases/tag/v0.1.0-demo.2). It has Android version code 2 and can update demo.1 when signed by the same machine-local key.
+Current release: [v0.1.0-demo.3](https://github.com/FYI88/REKEBTEST/releases/tag/v0.1.0-demo.3).
+
+[Download the latest Android APK](https://github.com/FYI88/REKEBTEST/releases/latest/download/rkeb-android.apk). Version code 3; includes both illustrated footer styles and the temporary comparison toggle. Can update earlier demo versions when signed by the same machine-local key.
+
+The website displays **APK Android** in its mobile landing action bar and shared footer (below 768px). Downloads are hidden inside the native Capacitor app. The stable link uses GitHub's latest release with the asset name `rkeb-android.apk`; keep that exact name and mark future demo releases as Latest for the link to continue working. This is an Android APK, not an iOS app.
 
 The locally built, debug-signed APK is:
 

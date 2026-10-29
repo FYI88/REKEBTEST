@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowUpRight, Github } from "lucide-react";
 import { Logo } from "@/components/ui";
+import { AndroidDownload } from "@/components/android-download";
 
 export function SiteFooter() {
   // Temporary comparison control; remove once the footer direction is chosen.
@@ -79,6 +80,12 @@ export function SiteFooter() {
             <p className="site-footer-caption mt-2 max-w-sm text-sm">
               Un projet étudiant pensé pour les trajets quotidiens de la communauté ENSA Tanger.
             </p>
+            <div className="mt-5 grid max-w-xs gap-2 pb-16 md:hidden">
+              <AndroidDownload />
+              <p className="site-footer-caption text-xs">
+                Dernière version démo · Android 7.0 minimum. Fichier APK à installer sur Android.
+              </p>
+            </div>
           </div>
           <nav aria-label="À découvrir" className="grid content-start gap-3 text-sm font-bold">
             <p className="site-footer-caption mb-1 font-mono text-[11px] uppercase tracking-wider">

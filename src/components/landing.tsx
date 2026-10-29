@@ -10,6 +10,7 @@ import { Button, Logo, Stamp, Tag } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import campus from "@/assets/campus-carpool.jpg";
 import { SiteFooter } from "@/components/site-footer";
+import { AndroidDownload } from "@/components/android-download";
 import { survey, surveyHighlights, surveyPercent } from "@/lib/survey-results";
 
 function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
@@ -299,6 +300,7 @@ export function Landing() {
     <div className="fixed inset-x-3 bottom-3 z-40 flex gap-2 rounded-xl border-2 border-ink bg-card p-2 hard md:hidden">
       <Button className="h-11 flex-1" onClick={tryDemo}><Play size={15} />Essayer</Button>
       <Link to="/signup" className="flex-1"><Button variant="ink" className="h-11 w-full">Rejoindre</Button></Link>
+      <AndroidDownload />
     </div>
 
     <SiteFooter />
