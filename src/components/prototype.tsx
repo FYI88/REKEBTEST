@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowUpRight, Bike, Bell, Car, Check, Clock, Compass, Heart, House, MapPin, Moon, Palette, Plus, Repeat, Search, Sun, Ticket, Trash2, User, WalletCards, Zap } from "lucide-react";
+import { ArrowUpRight, Bike, Bell, Car, Check, Clock, Compass, Fuel, Gauge, Heart, House, Megaphone, MapPin, Moon, Palette, Plus, Repeat, Search, Sun, Ticket, Trash2, User, WalletCards, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { neighborhoods, notifications, type Trip, type NotifIcon } from "@/lib/demo-data";
 import { dateLabel, demoTrips, publishTrip, useMyWallet, useTrips } from "@/lib/db";
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/app", label: "Rouler", icon: House },
+  { to: "/requests", label: "Demandes", icon: Megaphone },
   { to: "/trips", label: "Billets", icon: Ticket },
   { to: "/wallet", label: "Wallet", icon: WalletCards },
   { to: "/profile", label: "Moi", icon: User },
@@ -48,8 +49,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
     </header>
     <main id="contenu" className="mx-auto max-w-5xl px-4 pb-32 pt-6">{children}</main>
-    <nav aria-label="Navigation principale" className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-md rounded-xl border-2 border-ink bg-ink p-1.5 hard">
-      <div className="grid grid-cols-4 gap-1">{nav.map(({ to, label, icon: Icon }) =>
+    <nav aria-label="Navigation principale" className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-lg rounded-xl border-2 border-ink bg-ink p-1.5 hard">
+      <div className="grid grid-cols-5 gap-1">{nav.map(({ to, label, icon: Icon }) =>
         <Link key={to} to={to} className="flex flex-col items-center gap-0.5 rounded-lg py-2 font-mono text-[10px] font-bold uppercase text-ink-muted transition [&.active]:bg-accent [&.active]:text-accent-foreground"><Icon size={19} />{label}</Link>)}
       </div>
     </nav>
@@ -109,7 +110,7 @@ export function TripCard({ trip, favorite, onToggleFavorite }: { trip: Trip; fav
   const full = trip.seats === 0;
   const toEnsa = trip.slot === "Matin";
   return <div className="relative">
-    <Link to="/ride/$rideId" params={{ rideId: trip.id }} className={cn("press group relative grid grid-cols-[1fr_auto] rounded-lg border-2 border-ink bg-card hard-sm", full && "opacity-60")}>
+    <Link to="/ride/$rideId" params={{ rideId: trip.id }} className={cn("press group relative grid grid-cols-[minmax(0,1fr)_auto] rounded-lg border-2 border-ink bg-card hard-sm", full && "opacity-60")}>
       <div className={cn("p-4", onToggleFavorite && "pr-10")}>
         <div className="flex flex-wrap items-center gap-1.5">
           <Tag>{trip.vehicle === "Moto" ? <Bike size={11} /> : <Car size={11} />}{trip.vehicle}</Tag>
@@ -156,7 +157,7 @@ export function Dashboard() {
   const { session } = useAuth();
   const { data: dbTrips } = useTrips(!!session);
   const demo = useMemo(() => visibleDemoTrips(s), [s]);
-  const source = session && dbTrips?.length ? dbTrips : demo;
+  const source = session && dbTrips?.length ? dbTrips.filter((t) => !s.blocked.includes(t.driver)) : demo;
   const list = useMemo(() => sortTrips(source.filter((t) =>
     (area === "Tous" || t.from === area) && t.slot === slot && (veh === "Tous" || t.vehicle === veh)
     && (!onlyFree || t.seats > 0) && (!onlyFav || s.favorites.includes(t.id)) && matchesQuery(t, query)), sort),
@@ -177,6 +178,10 @@ export function Dashboard() {
         {(["passager", "conducteur"] as const).map((r) => <button key={r} aria-pressed={s.role === r} onClick={() => setStore(() => ({ role: r }))} className={cn("flex-1 rounded-lg py-3 text-sm font-bold transition", s.role === r ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{r === "passager" ? "Je cherche" : "Je conduis"}</button>)}
       </div>
     </section>
+
+    <nav aria-label="Raccourcis" className="mt-5 flex flex-wrap gap-2">
+      {[{ to: "/requests", label: "Demandes", Icon: Megaphone }, { to: "/groups", label: "Groupes et cotisation", Icon: Fuel }, ...(driver ? [{ to: "/driver", label: "Tableau conducteur", Icon: Gauge }] : [])].map(({ to, label, Icon }) => <Link key={to} to={to} className="press inline-flex h-9 items-center gap-1.5 rounded-full border-2 border-ink bg-card px-3.5 text-xs font-bold hard-sm"><Icon size={13} />{label}</Link>)}
+    </nav>
 
     {driver ? <OfferRide /> : <>
       <div className="mt-6 flex items-center gap-3 overflow-hidden rounded-lg border-2 border-ink bg-accent px-4 py-3 text-accent-foreground">

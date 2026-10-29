@@ -70,3 +70,27 @@ const replies: [RegExp, string][] = [
 export function demoReply(text: string): string {
   return replies.find(([re]) => re.test(text))?.[1] ?? "Ok, noté !";
 }
+
+/** Code de montée à 4 chiffres, stable pour une réservation donnée. */
+export function pinFor(seed: string): string {
+  return String(1000 + (hash(seed + "pin") % 9000));
+}
+
+export type TrackStage = { key: string; label: string; from: number };
+
+export const trackStages: TrackStage[] = [
+  { key: "route", label: "Conducteur en route vers ton pickup", from: 0 },
+  { key: "near", label: "À moins de 2 minutes", from: 45 },
+  { key: "arrived", label: "Arrivé au pickup", from: 70 },
+  { key: "onboard", label: "En route vers l’ENSA", from: 82 },
+  { key: "done", label: "Arrivé à l’ENSA", from: 100 },
+];
+
+export function stageFor(progress: number): TrackStage {
+  return [...trackStages].reverse().find((s) => progress >= s.from) ?? trackStages[0]!;
+}
+
+/** ETA restant en minutes avant le pickup (12 min au départ, 0 à 70 %). */
+export function etaMinutes(progress: number): number {
+  return Math.max(0, Math.ceil(12 * (1 - Math.min(progress, 70) / 70)));
+}

@@ -20,12 +20,12 @@ export const trips: [Trip, ...Trip[]] = [
 
 export const me = { name: "Amine Benali", first: "Amine", initials: "AB", filiere: "Génie Informatique 2", cne: "R136724519", email: "amine.benali@etu.uae.ac.ma" };
 
-export type Tx = { id: string; label: string; amount: number; date: string; kind: "trajet" | "remboursement" | "recharge" | "cotisation" };
+export type Tx = { id: string; label: string; amount: number; date: string; kind: "trajet" | "remboursement" | "recharge" | "cotisation" | "gain" };
 export const transactions: Tx[] = [
   { id: "t1", label: "Trajet Boukhalef → ENSA", amount: -5, date: "Hier 07:25", kind: "trajet" },
   { id: "t2", label: "Remboursement : annulation conducteur", amount: 5, date: "Lun. 17:10", kind: "remboursement" },
   { id: "t3", label: "Recharge cash validée par l’admin", amount: 50, date: "Lun. 12:30", kind: "recharge" },
-  { id: "t4", label: "Cotisation essence groupe Yasmine", amount: -15, date: "Dim. 20:00", kind: "cotisation" },
+  { id: "t4", label: "Cotisation essence groupe Yasmine", amount: -30, date: "Dim. 20:00", kind: "cotisation" },
   { id: "t5", label: "Trajet ENSA → Iberia", amount: -5, date: "Ven. 17:10", kind: "trajet" },
 ];
 
@@ -135,3 +135,67 @@ export const trustPoints = [
   { title: "SOS et partage live", body: "Un bouton alerte ton contact d’urgence et l’administration, un lien permet à un proche de te suivre." },
   { title: "Avis et notes", body: "Chaque trajet se note. Les conducteurs fiables remontent, les autres disparaissent." },
 ] as const;
+
+export type RideRequest = {
+  id: string; name: string; initials: string; color: string; from: string; slot: "Matin" | "Soir";
+  time: string; date: string; note: string; status: "ouverte" | "acceptée" | "annulée"; mine: boolean; acceptedBy?: string;
+};
+
+export const seedRequests: RideRequest[] = [
+  { id: "q1", name: "Hiba Lahlou", initials: "HL", color: "bg-avatar-3", from: "Mesnana", slot: "Matin", time: "07:35", date: "Demain", note: "Un seul sac, ponctuelle.", status: "ouverte", mine: false },
+  { id: "q2", name: "Ilyas Ghazi", initials: "IG", color: "bg-avatar-1", from: "Boukhalef", slot: "Matin", time: "07:25", date: "Demain", note: "Même pickup que d’habitude (Marjane).", status: "ouverte", mine: false },
+  { id: "q3", name: "Nora Benjelloun", initials: "NB", color: "bg-avatar-2", from: "Malabata", slot: "Soir", time: "17:05", date: "Aujourd’hui", note: "Retour après le TP, une place suffit.", status: "ouverte", mine: false },
+  { id: "q4", name: "Adam Chraibi", initials: "AC", color: "bg-avatar-5", from: "Iberia", slot: "Soir", time: "17:10", date: "Demain", note: "Moto ou voiture, peu importe.", status: "ouverte", mine: false },
+];
+
+export type GroupMember = { name: string; initials: string };
+export type Group = {
+  id: string; name: string; from: string; slot: "Matin" | "Soir"; time: string; driver: string;
+  members: GroupMember[]; weeklyFuel: number; maxMembers: number; mine?: boolean;
+};
+
+export const seedGroups: Group[] = [
+  { id: "g1", name: "Groupe de Yasmine", from: "Boukhalef", slot: "Matin", time: "07:25", driver: "Yasmine El Amrani", weeklyFuel: 150, maxMembers: 4, members: [{ name: "Ilyas G.", initials: "IG" }, { name: "Nora B.", initials: "NB" }, { name: "Adam C.", initials: "AC" }] },
+  { id: "g2", name: "Les Iberia du soir", from: "Iberia", slot: "Soir", time: "17:10", driver: "Omar Alaoui", weeklyFuel: 150, maxMembers: 4, members: [{ name: "Sara I.", initials: "SI" }, { name: "Hiba L.", initials: "HL" }] },
+  { id: "g3", name: "Malabata Express", from: "Malabata", slot: "Matin", time: "07:30", driver: "Leila Amrani", weeklyFuel: 160, maxMembers: 4, members: [{ name: "Omar A.", initials: "OA" }] },
+];
+
+export const groupSeedMessages: Record<string, ChatMessage[]> = {
+  g1: [
+    { from: "them", text: "Plein fait ce matin, 180 DH au total pour la semaine.", time: "08:10" },
+    { from: "them", text: "Pensez à valider votre cotisation avant dimanche.", time: "08:11" },
+  ],
+  g2: [{ from: "them", text: "Départ à 17:10 devant l’entrée principale, ne soyez pas en retard !", time: "12:40" }],
+};
+
+export type Report = { id: string; target: string; reason: string; details: string; time: string; status: "ouvert" | "traité"; by: string; tripId?: string };
+
+export const reportReasons = ["Conduite dangereuse", "Retard ou absence", "Comportement irrespectueux", "Faux profil", "Autre"] as const;
+
+export const seedReports: Report[] = [
+  { id: "r-s1", target: "M. Karim Bennani", reason: "Retard ou absence", details: "Parti sans attendre au pickup, deux fois cette semaine.", time: "Hier 08:05", status: "ouvert", by: "Ilyas G.", tripId: "5" },
+  { id: "r-s2", target: "Nabil Tazi", reason: "Conduite dangereuse", details: "Vitesse excessive sur la route de Tétouan.", time: "Lun. 17:40", status: "ouvert", by: "Nora B.", tripId: "6" },
+];
+
+export type DriverPassenger = { key: string; name: string; initials: string; pickup: string; color: string };
+
+export const driverSeed = {
+  monthBase: 180,
+  upcoming: { id: "d1", from: "Boukhalef", time: "07:30", date: "Demain", slot: "Matin" as const, seats: 4, vehicle: "Voiture" as const },
+  passengers: [
+    { key: "dp1", name: "Ilyas Ghazi", initials: "IG", pickup: "Rond-point Marjane", color: "bg-avatar-1" },
+    { key: "dp2", name: "Nora Benjelloun", initials: "NB", pickup: "Station Shell", color: "bg-avatar-2" },
+  ] as DriverPassenger[],
+  weekly: [
+    { day: "Lun", gain: 20 },
+    { day: "Mar", gain: 30 },
+    { day: "Mer", gain: 25 },
+    { day: "Jeu", gain: 40 },
+    { day: "Ven", gain: 35 },
+  ],
+  history: [
+    { id: "h1", label: "Boukhalef → ENSA", date: "Hier 07:30", passengers: 3, gain: 15 },
+    { id: "h2", label: "ENSA → Boukhalef", date: "Lun. 17:05", passengers: 4, gain: 20 },
+    { id: "h3", label: "Boukhalef → ENSA", date: "Lun. 07:30", passengers: 2, gain: 10 },
+  ],
+};

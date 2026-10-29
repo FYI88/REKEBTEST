@@ -14,7 +14,7 @@ Verified student carpooling between Tangier and the **ENSA Tanger** campus.
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-Postgres_+_RLS-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-10_passing-107c41?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-14_passing-107c41?style=for-the-badge)
 
 Built by **Chetaine Younes** · ENSA GSR1
 
@@ -100,6 +100,13 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 - **My published rides** list with removal (demo mode).
 - Earn 5 DH + 10 eco-points per seat filled; **Top helpers** leaderboard.
 
+### Requests, groups, tracking and safety
+- **Ride requests** (`/requests`): passengers post "I need a ride from X at Y"; drivers see a request board and offer a seat. In the prototype a driver answers your request after a few seconds so you can see the full loop.
+- **Groups and fuel pool** (`/groups`): join or create a regular carpool group, split the weekly fuel (your share is debited from the wallet and logged), and chat with the group.
+- **Live tracking** (`/track/$tripId`): simulated driver progress with ETA, stage notifications, the car plate to verify, SOS and share-trip.
+- **Boarding PIN**: every ticket has a 4-digit code the passenger gives the driver after checking the plate. The driver validates it, which credits +5 DH and +10 eco-points.
+- **Reports and block**: report a driver from the ride page, the chat or the tracking page, and optionally block them (their rides vanish from your search). Blocked users are listed and reversible in the profile.
+- **Driver dashboard** (`/driver`): earnings, passengers helped, weekly gains chart, next ride manifest with PIN validation, published rides, history. 0% commission.
 ### For admins
 - **Control tower** (`/admin`): KPIs, weekly rides chart, CNE + email verification queue, cash top-up approvals, ride moderation with search.
 - **Suspending a ride removes it from passenger discovery** (and can be reversed).
@@ -127,7 +134,11 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 | `/wallet` | **Wallet** | Balance and "≈ N trips", cash top-up modal (20 / 50 / 100 DH → code to show at the BDE desk), points card with progress bar, fuel pool, monthly subscription (coming soon), transaction history. |
 | `/chat/$tripId` | **Trip chat** | Driver header with masked number, message log, quick replies, text input. |
 | `/profile` | **Profile** | Identity (filière, CNE, email), ride counters, passenger/driver mode, theme picker (Tanger / ENSA / Nuit), preferred vibe, **Ton impact** card, Top helpers leaderboard, admin console link, sign out, reset demo. |
-| `/admin` | **Admin console** | KPIs, weekly chart, verification queue, cash top-ups, ride moderation table with search and suspend/reactivate, action log. |
+| `/requests` | **Ride requests** | Tabs *Je cherche une place* (post a request, track its status, see the driver who answers, open their ride) and *Je conduis* (board of passenger requests, "Proposer une place"). |
+| `/groups` | **Groups** | Group cards (route, time, driver, members, fuel pool, your weekly share), join/leave with wallet debit, group chat, create-a-group dialog, summary counters. |
+| `/driver` | **Driver dashboard** | Earnings and counters, weekly gains chart, next ride with passenger manifest and **Valider la montée** PIN dialog, published rides, history. |
+| `/track/$tripId` | **Live tracking** | Stage banner and ETA, route with moving car, progress bar, boarding PIN, driver and plate card, chat link, SOS, share, report. |
+| `/admin` | **Admin console** | KPIs, weekly chart, verification queue, cash top-ups, **reports queue** (suspend the driver or dismiss), ride moderation table with search and suspend/reactivate, action log. |
 
 ---
 
@@ -171,7 +182,7 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 8. **Board**: open `/trips` → **À venir** → **QR d'embarquement** and show the code to the driver.
 9. **Cancel if needed**: **Annuler** → confirm. Wallet payments are refunded (+5 DH), points are re-credited.
 10. **Rate the driver**: in **Historique**, tap 1–5 stars.
-11. **Manage money** on `/wallet`: **Recharger en cash** → choose 20 / 50 / 100 DH → **Générer mon code** → show the code and the cash at the BDE desk; the admin credits you. Track your points toward a free ride and join the **Cotisation essence** (15 DH/week).
+11. **Manage money** on `/wallet`: **Recharger en cash** → choose 20 / 50 / 100 DH → **Générer mon code** → show the code and the cash at the BDE desk; the admin credits you. Track your points toward a free ride and join the **Cotisation essence** (30 DH/week, your share of the Groupe de Yasmine fuel pool).
 12. **Check your profile** at `/profile`: ride counters, **Ton impact** (DH saved, CO₂ avoided, time gained), preferred vibe, theme.
 13. **Notifications**: the bell in the header shows an unread counter; **Tout marquer comme lu** clears it.
 14. **Change theme** with the palette/moon button in the header (Tanger → ENSA → Nuit) or on the profile page.
@@ -198,6 +209,46 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 7. Every action is time-stamped in the green log at the top.
 8. Sign out with the icon at the top right.
 
+### F. Requesting a ride (passenger)
+
+1. Open **Demandes** in the bottom bar (or the shortcut on `/app`).
+2. On *Je cherche une place*, choose Vers l'ENSA or Depuis l'ENSA, the neighborhood, day and time, add an optional note.
+3. Click **Publier ma demande**. It shows as *ouverte* ("En attente d'un conducteur").
+4. After a few seconds a driver answers: a notification appears and the request becomes *acceptée*. Click **Voir le trajet** to book it, or **Annuler** while it is still open.
+
+### G. Answering requests (driver)
+
+1. In **Demandes**, open the *Je conduis* tab.
+2. Read the board and click **Proposer une place** on a request. Accepted passengers move to *Places proposées* and appear in your driver dashboard.
+
+### H. Groups and fuel pool
+
+1. Open **Groupes** (shortcut on `/app`, or the profile page).
+2. Each card shows the route, time, driver, members, the fuel for the week and **your share**.
+3. Click **Rejoindre** to join: your share is debited from the wallet and added to the history. The wallet's *Cotisation essence* card stays in sync.
+4. Click **Chat du groupe** to talk with the members (locked until you join). **Quitter** leaves the group.
+5. **Créer un groupe** lets you set the name, neighborhood, slot, time, weekly fuel cost and number of seats.
+
+### I. Live tracking and the boarding PIN
+
+1. Book a ride, then go to **Billets** and click **Suivre** on the ticket.
+2. Watch the stage banner and ETA move from *en route* to *arrivé à l'ENSA*. Use **Pause**, **Avancer** or **Rejouer** to control the simulation.
+3. When the driver arrives, **check the plate** against the one on screen, then give your **4-digit code** to the driver.
+4. Use **SOS**, **Partager** or **Signaler un problème** at any time.
+
+### J. Driver dashboard and validating a boarding
+
+1. Open `/driver` (profile link, or the shortcut on `/app` in driver mode).
+2. Read your earnings, passengers helped and weekly gains.
+3. In **Prochain trajet**, click **Valider la montée** next to a passenger, enter their 4-digit code and confirm. A wrong code is refused. In the demo the expected code is shown in the dialog.
+4. A valid code marks the passenger *À bord* and credits **+5 DH** and **+10 eco-points** to your wallet.
+
+### K. Reporting and blocking
+
+1. On a ride page, in the chat header or on the tracking page, click **Signaler** (flag).
+2. Choose a reason, add details, optionally tick **Bloquer** and click **Envoyer**.
+3. Blocked drivers disappear from search. Unblock them in **Profil → Utilisateurs bloqués**.
+4. Admins review reports in `/admin → Signalements` and either **Suspendre** (hides all that driver's rides) or **Classer**.
 ### F. Reset
 
 **Profil → Recommencer la démo** restores Amine's initial state (35 DH, 120 pts, no published rides, no chats).
@@ -262,7 +313,9 @@ Tip: in Supabase → Authentication → Email, disable **Confirm email** for ins
 │   ├── components/
 │   │   ├── ui.tsx             Button, Field, Tag, Logo, Modal, Stamp, EmptyState
 │   │   ├── prototype.tsx      AppShell, TripCard, Dashboard, OfferRide, ThemeToggle, notifications
-│   │   ├── screens.tsx        Landing, Auth, RideDetail, Trips, Wallet, Chat, Profile, Admin
+│   │   ├── landing.tsx        Landing page (departure board, savings calculator, role tabs)
+│   │   ├── features.tsx       Requests, Groups, Live tracking, Driver dashboard, Report dialog
+│   │   ├── screens.tsx        Auth, RideDetail, Trips, Wallet, Chat, Profile, Admin
 │   │   └── ui/                shadcn/Radix primitives (Toaster used)
 │   ├── lib/
 │   │   ├── demo-data.ts       single source of demo content
@@ -274,6 +327,7 @@ Tip: in Supabase → Authentication → Email, disable **Confirm email** for ins
 │   │   └── supabase.ts        client (safe fallback without env)
 │   ├── styles.css             design tokens and the three themes
 │   └── test/                  vitest: routing + utilities
+├── docs/COMPETITOR-ANALYSIS.md   Rkeb vs inDrive vs Uber: what to copy, what to avoid
 ├── HANDOFF.md                 living project log
 ├── DEMO-SCRIPT.md             timed 5-minute demo script
 └── AGENTS.md                  rules for AI agents working on the repo
@@ -302,10 +356,12 @@ Stack: TanStack Start + Router, React 19, Tailwind CSS v4, Vite 8, TanStack Quer
 - [x] Real reads/writes for rides, bookings, wallet, ratings, top-up requests
 - [x] ENSA theme, then Nuit (dark) theme
 - [x] Driver publishing (demo and Supabase), search/sort/favorites, impact stats, admin guard
+- [x] Ride requests, groups/fuel pool, live tracking with boarding PIN, reports and block, driver dashboard (prototype, see [competitor analysis](docs/COMPETITOR-ANALYSIS.md))
 - [ ] Leaflet/OpenStreetMap map for pickups (the route map is currently illustrative)
 - [ ] Realtime chat on the `messages` table
 - [ ] Postgres trigger for the wallet ledger and seat counters
-- [ ] Admin console on real data (verification, top-ups, moderation)
+- [ ] Admin console on real data (verification, top-ups, moderation, reports)
+- [ ] Persist requests, groups, reports and boarding validation in Supabase
 - [ ] Vercel/Cloudflare deployment
 
 ---

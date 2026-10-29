@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { seedMessages, trips as seedTrips, type ChatMessage, type Trip, type Tx } from "@/lib/demo-data";
+import { groupSeedMessages, seedGroups as seedGroupsRef, seedMessages, trips as seedTrips, type ChatMessage, type Group, type Report, type RideRequest, type Trip, type Tx } from "@/lib/demo-data";
 
 export type Pay = "wallet" | "points" | "cotisation";
 export type Theme = "tanger" | "ensa" | "nuit";
@@ -21,13 +21,21 @@ type State = {
   hiddenTrips: string[];
   chats: Record<string, ChatMessage[]>;
   ledger: Tx[];
+  myRequests: RideRequest[];
+  acceptedRequests: string[];
+  joinedGroups: string[];
+  myGroups: Group[];
+  reports: Report[];
+  blocked: string[];
+  boarded: string[];
+  handledReports: string[];
 };
 
 const KEY = "rkeb-demo-state-v1";
 
 const seed: State = {
   role: "passager", balance: 35, points: 120, cotisation: false, published: 0, demoMode: true, theme: "tanger",
-  ambiance: "Musique", notifsRead: false, myRides: [], favorites: [], hiddenTrips: [], chats: {}, ledger: [],
+  ambiance: "Musique", notifsRead: false, myRides: [], favorites: [], hiddenTrips: [], chats: {}, ledger: [], myRequests: [], acceptedRequests: [], joinedGroups: [], myGroups: [], reports: [], blocked: [], boarded: [], handledReports: [],
   bookings: [{ tripId: "7", pay: "wallet", pickup: "ENSA entrée principale", status: "terminé" }],
 };
 
@@ -77,8 +85,8 @@ function applyBookings(t: Trip, bookings: Booking[]): Trip {
 }
 
 /** Trajets de démo visibles : ceux publiés par l'utilisateur d'abord, sans ceux suspendus par l'admin, places mises à jour. */
-export function visibleDemoTrips(s: Pick<State, "myRides" | "hiddenTrips" | "bookings">): Trip[] {
-  return [...s.myRides, ...seedTrips].filter((t) => !s.hiddenTrips.includes(t.id)).map((t) => applyBookings(t, s.bookings));
+export function visibleDemoTrips(s: Pick<State, "myRides" | "hiddenTrips" | "bookings" | "blocked">): Trip[] {
+  return [...s.myRides, ...seedTrips].filter((t) => !s.hiddenTrips.includes(t.id) && !s.blocked.includes(t.driver)).map((t) => applyBookings(t, s.bookings));
 }
 
 /** Tous les trajets de démo (même suspendus) : sert à retrouver un billet ou une conversation existants. */
@@ -94,5 +102,25 @@ export function ledgerEntry(label: string, amount: number, kind: Tx["kind"]): Tx
   return { id: `l-${d.getTime()}-${Math.abs(amount)}`, label, amount, kind, date: `Aujourd’hui ${hhmm}` };
 }
 export function chatFor(s: Pick<State, "chats">, tripId: string): ChatMessage[] {
-  return s.chats[tripId] ?? (tripId === "1" ? seedMessages : []);
+  if (s.chats[tripId]) return s.chats[tripId];
+  if (tripId.startsWith("group:")) return groupSeedMessages[tripId.slice(6)] ?? [];
+  return tripId === "1" ? seedMessages : [];
 }
+
+export function allGroups(s: Pick<State, "myGroups">): Group[] {
+  return [...s.myGroups, ...seedGroupsRef];
+}
+
+/** Membres affichés : membres de base + toi si tu as rejoint. */
+export function groupMemberCount(g: Group, joined: string[]): number {
+  return g.members.length + (joined.includes(g.id) ? 1 : 0);
+}
+
+/** Part hebdomadaire par membre (carburant partagé entre conducteur et membres). */
+export function groupShare(g: Group, joined: string[]): number {
+  return Math.ceil(g.weeklyFuel / (groupMemberCount(g, joined) + 1));
+}
+
+/** Cotisation essence = part hebdomadaire du groupe de Yasmine une fois que tu l'as rejoint (30 DH). */
+export const COTISATION_GROUP_ID = "g1";
+export const COTISATION_DH = groupShare({ ...seedGroupsRef[0]!, members: [...seedGroupsRef[0]!.members, { name: "Toi", initials: "TO" }] }, []);

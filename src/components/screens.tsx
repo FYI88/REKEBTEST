@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, Clock, Coins, Eye, EyeOff, Fuel, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, Clock, Coins, Eye, EyeOff, Flag, Fuel, Gauge, Megaphone, Navigation as NavIcon, UserX, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
 import { toast } from "sonner";
-import { leaderboard, rechargeRequests, reviews, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Review, type Trip } from "@/lib/demo-data";
+import { leaderboard, rechargeRequests, reviews, seedReports, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Report, type Review, type Trip } from "@/lib/demo-data";
 import { bookSeat, cancelBooking, rateTrip, requestRecharge, useMyBookings, useMyWallet, useTrip } from "@/lib/db";
-import { chatFor, findDemoTrip, ledgerEntry, resetDemo, setStore, useStore, visibleDemoTrips, type Pay } from "@/lib/store";
+import { COTISATION_DH, COTISATION_GROUP_ID, chatFor, findDemoTrip, ledgerEntry, resetDemo, setStore, useStore, type Pay } from "@/lib/store";
 import { formatMinutes, impactFor } from "@/lib/impact";
 import { addMinutes, clockNow, demoReply, qrFor } from "@/lib/trip-utils";
 import { friendlyAuthError, sendEmailCode, signInWithPassword, signOutUser, signUpWithPassword, useAuth, useIdentity, verifyEmailCode } from "@/lib/auth";
 import { AppShell, Avatar, SeatDots, TripCard } from "@/components/prototype";
+import { ReportModal } from "@/components/features";
 import { Button, EmptyState, Field, inputClass, Logo, Modal, Stamp, Tag } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -162,6 +163,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
   const [pickup, setPickup] = useState(t.pickups[0] ?? "");
   const [pay, setPay] = useState<Pay>("wallet");
   const [sos, setSos] = useState(false);
+  const [report, setReport] = useState(false);
   const revs = session ? dbReviews : (reviews[t.id] ?? []);
   const [ok, setOk] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -172,6 +174,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
     setErr(null);
     if (pay === "wallet" && lowWallet) { setErr("Solde insuffisant : recharge ton wallet ou choisis un autre paiement."); return; }
     if (pay === "points" && lowPoints) { setErr("Pas assez de points : il en faut 50 pour un trajet."); return; }
+    if (pay === "cotisation" && !session && !s.joinedGroups.includes(COTISATION_GROUP_ID)) { setErr("Rejoins d’abord la cotisation essence depuis Groupes ou Wallet."); return; }
     if (session) {
       if (!userId) { setErr("Connecte-toi pour réserver."); return; }
       setBusy(true);
@@ -192,7 +195,6 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
     setStore((x) => ({
       balance: pay === "wallet" ? x.balance - 5 : x.balance,
       points: pay === "points" ? x.points - 50 : x.points,
-      cotisation: pay === "cotisation" ? true : x.cotisation,
       bookings: [{ tripId: t.id, pay, pickup, status: "confirmé" }, ...x.bookings],
       ledger: pay === "wallet" ? [ledgerEntry(`Trajet ${routeLabel(t)}`, -5, "trajet"), ...x.ledger] : x.ledger,
     }));
@@ -236,6 +238,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
             {[["Véhicule", t.car || "—"], ["Plaque", t.plate || "—"], ["Places", `${t.total - t.seats}/${t.total} prises`], ["Ambiance", t.preference]].map(([k, v]) => <div key={k} className="bg-card p-2.5"><dt className="font-mono text-[10px] uppercase text-muted-foreground">{k}</dt><dd className="font-bold">{v}</dd></div>)}
           </dl>
           <Link to="/chat/$tripId" params={{ tripId: t.id }} className="mt-3 flex items-center justify-center gap-2 rounded-md border-2 border-ink py-2.5 text-sm font-bold"><MessageCircle size={16} />Écrire (sans partager ton numéro)</Link>
+          <div className="mt-3 flex justify-center gap-4"><button onClick={() => setReport(true)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground underline"><Flag size={12} />Signaler</button><button onClick={() => { setStore((x) => ({ blocked: x.blocked.includes(t.driver) ? x.blocked : [...x.blocked, t.driver] })); toast(`${t.driver} bloqué·e`, { description: "Ses trajets disparaissent de ta recherche." }); nav({ to: "/app" }); }} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground underline"><UserX size={12} />Bloquer</button></div>
         </div>
         {revs.length > 0 && <div className="rounded-lg border-2 border-ink bg-card p-5 hard-sm">
           <h2 className="font-display text-xl font-extrabold">Ils en parlent</h2>
@@ -243,7 +246,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
         </div>}
         <div className="rounded-lg border-2 border-ink bg-card p-5 hard-sm">
           <h2 className="font-display text-xl font-extrabold">Payer ma place</h2>
-          <div className="mt-3 grid gap-2">{([["wallet", "Wallet", `5 DH · solde ${balance} DH${lowWallet ? " · insuffisant" : ""}`, Coins], ["points", "Carte de points", `50 pts · tu as ${s.points}`, Star], ["cotisation", "Cotisation essence", "15 DH/semaine avec le groupe", Fuel]] as const).map(([k, l, d, I]) =>
+          <div className="mt-3 grid gap-2">{([["wallet", "Wallet", `5 DH · solde ${balance} DH${lowWallet ? " · insuffisant" : ""}`, Coins], ["points", "Carte de points", `50 pts · tu as ${s.points}`, Star], ["cotisation", "Cotisation essence", `${COTISATION_DH} DH/semaine avec le groupe`, Fuel]] as const).map(([k, l, d, I]) =>
             <button key={k} aria-pressed={pay === k} onClick={() => setPay(k)} className={cn("flex items-center gap-3 rounded-md border-2 border-ink p-3 text-left", pay === k && "bg-ink text-ink-foreground")}><I size={18} /><span className="flex-1"><b className="block text-sm">{l}</b><span className="text-xs opacity-70">{d}</span></span>{pay === k && <Check size={16} />}</button>)}
           </div>
           {err && <p role="alert" className="mt-4 rounded-md border-2 border-ink bg-destructive-soft p-3 text-sm font-bold">{err}</p>}
@@ -257,6 +260,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
       <p className="text-sm">Pickup <b>{pickup}</b> à <b>{t.time}</b>. {t.driver.split(" ")[0]} a été prévenu·e. On te réveille 30 min avant.</p>
       <div className="mt-5 flex gap-2"><Button variant="paper" className="flex-1" onClick={() => setOk(false)}>Fermer</Button><Button className="flex-1" onClick={() => nav({ to: "/trips" })}>Mon billet</Button></div>
     </Modal>
+    <ReportModal open={report} onClose={() => setReport(false)} target={t.driver} tripId={t.id} />
     <Modal open={sos} onClose={() => setSos(false)} title="Alerte SOS">
       <p className="text-sm">Ta position live sera envoyée à ton contact d’urgence et à l’administration ENSA. À utiliser en cas de danger ou de problème sérieux.</p>
       <div className="mt-4 grid gap-2"><Button variant="danger" onClick={alertNow}><ShieldAlert size={16} />Alerter maintenant</Button><Button variant="paper" onClick={() => setSos(false)}>Annuler</Button></div>
@@ -337,7 +341,7 @@ export function TripsPage() {
           <Tag><MapPin size={11} />{r.pickup}</Tag><Tag>{r.pay === "wallet" ? "Wallet" : r.pay === "points" ? "Points" : "Cotisation"}</Tag>
           {r.status === "annulé" && <Tag className="bg-destructive-soft">Annulé · remboursé</Tag>}
           <span className="flex-1" />
-          {r.status === "confirmé" && <><button onClick={() => setQr({ id: r.t.id, seed: r.key })} className="text-sm font-bold text-primary underline">QR d’embarquement</button><button onClick={() => setToCancel(r)} className="text-sm font-bold text-destructive">Annuler</button></>}
+          {r.status === "confirmé" && <><Link to="/track/$tripId" params={{ tripId: r.t.id }} className="inline-flex items-center gap-1 text-sm font-bold text-primary underline"><NavIcon size={13} />Suivre</Link><button onClick={() => setQr({ id: r.t.id, seed: r.key })} className="text-sm font-bold text-primary underline">QR d’embarquement</button><button onClick={() => setToCancel(r)} className="text-sm font-bold text-destructive">Annuler</button></>}
           {r.rateable && <span className="flex gap-0.5" role="group" aria-label="Noter le conducteur">{[1, 2, 3, 4, 5].map((n) => <button key={n} onClick={() => rate(r, n)} aria-label={`${n} étoile${n > 1 ? "s" : ""}`}><Star size={20} className={cn(r.stars >= n ? "fill-accent" : "")} /></button>)}</span>}
         </div>
       </div>)}
@@ -381,13 +385,14 @@ export function WalletPage() {
     }
     setSent(true);
   };
+  const inPool = s.joinedGroups.includes(COTISATION_GROUP_ID);
   const toggleCotisation = () => {
     if (session) { toast("Bientôt disponible", { description: "La cotisation essence arrive en mode réel." }); return; }
-    if (!s.cotisation && s.balance < 15) { toast.error("Solde insuffisant", { description: "Il faut 15 DH pour rejoindre la cotisation." }); return; }
-    setStore((x) => x.cotisation
-      ? { cotisation: false }
-      : { cotisation: true, balance: x.balance - 15, ledger: [ledgerEntry("Cotisation essence groupe Yasmine", -15, "cotisation"), ...x.ledger] });
-    toast.success(s.cotisation ? "Cotisation quittée" : "Bienvenue dans le groupe", { description: s.cotisation ? undefined : "15 DH débités pour cette semaine." });
+    if (!inPool && s.balance < COTISATION_DH) { toast.error("Solde insuffisant", { description: `Il faut ${COTISATION_DH} DH pour rejoindre la cotisation.` }); return; }
+    setStore((x) => inPool
+      ? { cotisation: false, joinedGroups: x.joinedGroups.filter((g) => g !== COTISATION_GROUP_ID) }
+      : { cotisation: true, joinedGroups: [...x.joinedGroups, COTISATION_GROUP_ID], balance: x.balance - COTISATION_DH, ledger: [ledgerEntry("Cotisation essence · Groupe de Yasmine", -COTISATION_DH, "cotisation"), ...x.ledger] });
+    toast.success(inPool ? "Cotisation quittée" : "Bienvenue dans le groupe", { description: inPool ? undefined : `${COTISATION_DH} DH débités pour cette semaine.` });
   };
   const toNext = s.points % 50;
   return <AppShell>
@@ -411,9 +416,9 @@ export function WalletPage() {
     <div className="mt-4 grid gap-4 md:grid-cols-2">
       <div className="rounded-xl border-2 border-ink bg-card p-5">
         <div className="flex items-center gap-2"><Fuel size={18} /><h2 className="font-display text-xl font-extrabold">Cotisation essence</h2></div>
-        <p className="mt-1 text-sm text-muted-foreground">Groupe de Yasmine · 3 passagers · plein de 180 DH partagé chaque semaine.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Groupe de Yasmine · 4 passagers · plein de 150 DH partagé chaque semaine. <Link to="/groups" className="font-bold text-primary underline">Tous les groupes</Link></p>
         <div className="mt-3 h-3 overflow-hidden rounded-full border-2 border-ink"><div className="h-full w-2/3 bg-primary" /></div>
-        <Button variant={s.cotisation ? "paper" : "primary"} className="mt-4 w-full" onClick={toggleCotisation}>{s.cotisation ? "Inscrit · 15 DH/semaine ✓" : "Rejoindre pour 15 DH/semaine"}</Button>
+        <Button variant={inPool ? "paper" : "primary"} className="mt-4 w-full" onClick={toggleCotisation}>{inPool ? `Inscrit · ${COTISATION_DH} DH/semaine ✓` : `Rejoindre pour ${COTISATION_DH} DH/semaine`}</Button>
       </div>
       <div className="rounded-xl border-2 border-ink bg-card p-5">
         <h2 className="font-display text-xl font-extrabold">Abonnement mensuel</h2>
@@ -446,6 +451,7 @@ export function ChatPage() {
   const detail = useTrip(tripId ?? "", !!session && !!tripId);
   const t = session ? detail.data?.trip : findDemoTrip(s, tripId);
   const [txt, setTxt] = useState("");
+  const [report, setReport] = useState(false);
   const end = useRef<HTMLDivElement>(null);
   const msgs = tripId ? chatFor(s, tripId) : [];
   useEffect(() => { end.current?.scrollIntoView({ block: "end" }); }, [msgs.length]);
@@ -461,7 +467,7 @@ export function ChatPage() {
   };
   return <AppShell>
     <div className="mx-auto max-w-2xl overflow-hidden rounded-xl border-2 border-ink bg-card hard">
-      <div className="flex items-center gap-3 border-b-2 border-ink p-4"><Link to="/ride/$rideId" params={{ rideId: t.id }} aria-label="Retour au trajet"><ArrowLeft size={18} /></Link><Avatar trip={t} /><div className="min-w-0 flex-1"><p className="truncate font-bold">{t.driver}</p><p className="truncate font-mono text-[10px] uppercase text-muted-foreground">{t.time} · {t.from} · numéro masqué</p></div><Tag><Music size={11} />{t.preference}</Tag></div>
+      <div className="flex items-center gap-3 border-b-2 border-ink p-4"><Link to="/ride/$rideId" params={{ rideId: t.id }} aria-label="Retour au trajet"><ArrowLeft size={18} /></Link><Avatar trip={t} /><div className="min-w-0 flex-1"><p className="truncate font-bold">{t.driver}</p><p className="truncate font-mono text-[10px] uppercase text-muted-foreground">{t.time} · {t.from} · numéro masqué</p></div><Tag><Music size={11} />{t.preference}</Tag><button onClick={() => setReport(true)} aria-label={`Signaler ${t.driver}`} title="Signaler" className="grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 border-ink"><Flag size={14} /></button></div>
       <div role="log" aria-live="polite" className="grid max-h-[55vh] min-h-80 content-start gap-3 overflow-y-auto bg-background p-4">
         {msgs.length === 0 && <p className="m-auto max-w-xs text-center text-sm text-muted-foreground">Dis bonjour à {t.driver.split(" ")[0]} : pickup, heure, point de rencontre. Ton numéro reste masqué.</p>}
         {msgs.map((m, i) => <div key={i} className={cn("max-w-[80%] rounded-lg border-2 border-ink px-3 py-2 text-sm", m.from === "me" ? "ml-auto bg-primary text-primary-foreground" : "bg-card")}>{m.text}<span className="mt-0.5 block font-mono text-[9px] opacity-70">{m.time}</span></div>)}
@@ -471,6 +477,7 @@ export function ChatPage() {
       <form className="flex gap-2 p-4" onSubmit={(e) => { e.preventDefault(); send(txt); }}><input value={txt} onChange={(e) => setTxt(e.target.value)} aria-label="Message" className={inputClass} placeholder="Écris un message…" /><Button aria-label="Envoyer"><Send size={16} /></Button></form>
       {session && <p className="border-t-2 border-ink px-4 py-2 text-center font-mono text-[10px] uppercase text-muted-foreground">Messagerie locale · le temps réel arrive bientôt</p>}
     </div>
+    <ReportModal open={report} onClose={() => setReport(false)} target={t.driver} tripId={t.id} />
   </AppShell>;
 }
 
@@ -495,6 +502,8 @@ export function ProfilePage() {
         <div className="mt-5"><p className="font-mono text-[11px] font-bold uppercase">Mode actuel</p><div className="mt-2 grid grid-cols-2 gap-2">{(["passager", "conducteur"] as const).map((r) => <button key={r} aria-pressed={s.role === r} onClick={() => setStore(() => ({ role: r }))} className={cn("rounded-md border-2 border-ink py-2.5 text-sm font-bold capitalize", s.role === r && "bg-primary text-primary-foreground")}>{r}</button>)}</div></div>
         <div className="mt-5"><p className="font-mono text-[11px] font-bold uppercase">Thème</p><div className="mt-2 grid grid-cols-3 gap-2">{(["tanger", "ensa", "nuit"] as const).map((t) => <button key={t} aria-pressed={s.theme === t} onClick={() => setStore(() => ({ theme: t }))} className={cn("rounded-md border-2 border-ink py-2.5 text-sm font-bold capitalize", s.theme === t && "bg-primary text-primary-foreground")}>{t}</button>)}</div><p className="mt-1.5 text-xs text-muted-foreground">Tanger = thème par défaut · ENSA = variante institutionnelle · Nuit = mode sombre.</p></div>
         <div className="mt-5"><p className="font-mono text-[11px] font-bold uppercase">Ambiance préférée</p><div className="mt-2 flex flex-wrap gap-2">{(["Musique", "Silence", "Discussion"] as const).map((p) => <button key={p} aria-pressed={s.ambiance === p} onClick={() => setStore(() => ({ ambiance: p }))} className={cn("rounded-full border-2 border-ink px-3 py-1.5 text-xs font-bold", s.ambiance === p && "bg-ink text-ink-foreground")}>{p}</button>)}</div></div>
+        <div className="mt-5 grid gap-2">{[["/requests", "Mes demandes de trajet", Megaphone], ["/groups", "Mes groupes", Fuel], ["/driver", "Tableau conducteur", Gauge]].map(([to, l, I]) => { const Icon = I as typeof Fuel; return <Link key={to as string} to={to as "/requests"} className="flex items-center gap-2 rounded-md border-2 border-ink py-2.5 pl-3 text-sm font-bold"><Icon size={16} />{l as string}<ArrowRight size={14} className="ml-auto mr-3" /></Link>; })}</div>
+        {s.blocked.length > 0 && <div className="mt-5"><p className="font-mono text-[11px] font-bold uppercase">Utilisateurs bloqués</p><ul className="mt-2 grid gap-2">{s.blocked.map((b) => <li key={b} className="flex items-center gap-2 rounded-md border-2 border-ink bg-background p-2 text-sm"><UserX size={14} /><span className="flex-1 font-bold">{b}</span><button onClick={() => { setStore((x) => ({ blocked: x.blocked.filter((n) => n !== b) })); toast(`${b} débloqué·e`); }} className="text-xs font-bold text-primary underline">Débloquer</button></li>)}</ul></div>}
         {isAdmin && <Link to="/admin" className="mt-5 flex items-center justify-center gap-2 rounded-md border-2 border-ink py-2.5 text-sm font-bold"><ShieldCheck size={16} />Console d’administration</Link>}
         <Button variant="paper" className="mt-3 w-full" onClick={signOut}><LogOut size={16} />Se déconnecter</Button>
         <button onClick={() => { resetDemo(); toast("Démo réinitialisée"); nav({ to: "/app" }); }} className="mt-3 inline-flex w-full items-center justify-center gap-1.5 text-center font-mono text-[11px] uppercase text-muted-foreground underline"><RotateCcw size={12} />Recommencer la démo</button>
@@ -545,6 +554,13 @@ function AdminConsole() {
   const act = (m: string) => setLog((l) => [`${clockNow()} · ${m}`, ...l].slice(0, 5));
   const allTrips = [...s.myRides, ...trips];
   const shown = allTrips.filter((t) => `${t.driver} ${t.from} ${t.plate}`.toLowerCase().includes(search.trim().toLowerCase()));
+  const allReports = [...s.reports, ...seedReports];
+  const openReports = allReports.filter((r) => !s.handledReports.includes(r.id));
+  const closeReport = (r: Report, suspend: boolean) => {
+    const ids = suspend ? allTrips.filter((t) => t.driver === r.target).map((t) => t.id) : [];
+    setStore((x) => ({ handledReports: [...x.handledReports, r.id], hiddenTrips: [...new Set([...x.hiddenTrips, ...ids])] }));
+    act(suspend ? `${r.target} suspendu·e après signalement` : `Signalement contre ${r.target} classé`);
+  };
   const toggleTrip = (t: Trip) => {
     const hidden = s.hiddenTrips.includes(t.id);
     setStore((x) => ({ hiddenTrips: hidden ? x.hiddenTrips.filter((h) => h !== t.id) : [...x.hiddenTrips, t.id] }));
@@ -555,7 +571,7 @@ function AdminConsole() {
     <header className="border-b-2 border-ink bg-ink text-ink-foreground"><div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5"><Logo invert /><div className="flex items-center gap-3"><Tag className="bg-accent text-accent-foreground">Session admin · {profile?.role === "admin" ? profile.fullName : "ADM-ENSA-01"}</Tag><Link to="/app" className="font-mono text-[11px] font-bold uppercase underline">App</Link><button onClick={signOut} aria-label="Déconnexion"><LogOut size={18} /></button></div></div></header>
     <main className="mx-auto max-w-6xl px-5 py-8">
       <h1 className="font-display text-5xl font-extrabold">Tour de contrôle</h1>
-      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-5">{[["Membres vérifiés", "312"], ["En attente", String(queue.length)], ["Trajets cette semaine", String(weeklyTotal)], ["Recharges à valider", String(recharges.length)], ["Trajets suspendus", String(s.hiddenTrips.length)]].map(([l, n]) => <div key={l} className="rounded-lg border-2 border-ink bg-card p-4 hard-sm"><p className="font-display text-4xl font-extrabold">{n}</p><p className="font-mono text-[10px] uppercase">{l}</p></div>)}</div>
+      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">{[["Membres vérifiés", "312"], ["En attente", String(queue.length)], ["Trajets cette semaine", String(weeklyTotal)], ["Recharges à valider", String(recharges.length)], ["Signalements ouverts", String(openReports.length)], ["Trajets suspendus", String(s.hiddenTrips.length)]].map(([l, n]) => <div key={l} className="rounded-lg border-2 border-ink bg-card p-4 hard-sm"><p className="font-display text-4xl font-extrabold">{n}</p><p className="font-mono text-[10px] uppercase">{l}</p></div>)}</div>
       {log.length > 0 && <div aria-live="polite" className="mt-4 rounded-md border-2 border-ink bg-success-soft p-3 font-mono text-xs">{log.map((l, i) => <p key={i}>✓ {l}</p>)}</div>}
       <section className="mt-8"><h2 className="font-display text-2xl font-extrabold">Trajets de la semaine</h2>
         <div className="mt-3 rounded-lg border-2 border-ink bg-card p-4 hard-sm">
@@ -581,6 +597,13 @@ function AdminConsole() {
           <div className="mt-3 grid gap-3">{recharges.map((r) => <div key={r.id} className="flex items-center gap-3 rounded-lg border-2 border-ink bg-card p-4"><Coins size={18} /><div className="flex-1"><p className="font-bold">{r.name}</p><p className="font-mono text-[11px] text-muted-foreground">{r.at}</p></div><span className="font-display text-xl font-extrabold">{r.amount} DH</span><Button variant="accent" className="h-9 px-3" onClick={() => { setRecharges((x) => x.filter((y) => y.id !== r.id)); act(`${r.amount} DH crédités à ${r.name}`); }}>Créditer</Button></div>)}{!recharges.length && <p className="rounded-lg border-2 border-dashed border-ink p-6 text-center font-bold">Aucune recharge en attente.</p>}</div>
         </section>
       </div>
+      <section className="mt-8"><h2 className="font-display text-2xl font-extrabold">Signalements <span className="font-mono text-base text-muted-foreground">({openReports.length} ouverts)</span></h2>
+        <div className="mt-3 grid gap-3">{openReports.map((r) => <div key={r.id} className="flex flex-wrap items-center gap-3 rounded-lg border-2 border-ink bg-card p-4">
+          <Flag size={18} className="shrink-0 text-destructive" />
+          <div className="min-w-0 flex-1"><p className="font-bold">{r.target} <Tag>{r.reason}</Tag></p><p className="text-sm text-muted-foreground">{r.details}</p><p className="mt-1 font-mono text-[11px] text-muted-foreground">Par {r.by} · {r.time}</p></div>
+          <div className="flex gap-2"><Button variant="danger" className="h-9 px-3" onClick={() => closeReport(r, true)}><Ban size={14} />Suspendre</Button><Button variant="paper" className="h-9 px-3" onClick={() => closeReport(r, false)}>Classer</Button></div>
+        </div>)}{!openReports.length && <p className="rounded-lg border-2 border-dashed border-ink p-6 text-center font-bold">Aucun signalement ouvert.</p>}</div>
+      </section>
       <section className="mt-8"><div className="flex flex-wrap items-end justify-between gap-3"><h2 className="font-display text-2xl font-extrabold">Modération des trajets</h2>
         <label className="relative block min-w-56"><span className="sr-only">Filtrer les trajets</span><Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Conducteur, quartier, plaque…" className={cn(inputClass, "h-10 pl-9")} /></label></div>
         <div className="mt-3 overflow-x-auto rounded-lg border-2 border-ink bg-card"><table className="w-full min-w-[640px] text-sm"><thead className="border-b-2 border-ink bg-muted font-mono text-[10px] uppercase"><tr>{["Conducteur", "Trajet", "Plaque", "Places", ""].map((h) => <th key={h} className="p-3 text-left">{h}</th>)}</tr></thead>

@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { formatMinutes, impactFor } from "@/lib/impact";
-import { addMinutes, demoReply, matchesQuery, qrFor, sortTrips, tomorrowISO } from "@/lib/trip-utils";
+import { seedGroups, trips } from "@/lib/demo-data";
+import { COTISATION_DH, groupMemberCount, groupShare, visibleDemoTrips } from "@/lib/store";
+import { addMinutes, demoReply, etaMinutes, matchesQuery, pinFor, qrFor, sortTrips, stageFor, tomorrowISO } from "@/lib/trip-utils";
 
 describe("impactFor", () => {
   it("computes savings, CO2 and time from ride count", () => {
@@ -51,5 +53,42 @@ describe("trip helpers", () => {
   it("replies to chat messages", () => {
     expect(demoReply("Tu es où ?")).toContain("2 minutes");
     expect(demoReply("blabla")).toBe("Ok, noté !");
+  });
+});
+
+describe("boarding PIN and live tracking", () => {
+  it("derives a stable 4-digit PIN", () => {
+    expect(pinFor("dp1")).toMatch(/^\d{4}$/);
+    expect(pinFor("dp1")).toBe(pinFor("dp1"));
+    expect(pinFor("dp1")).not.toBe(pinFor("dp2"));
+  });
+  it("maps progress to stages and ETA", () => {
+    expect(stageFor(0).key).toBe("route");
+    expect(stageFor(50).key).toBe("near");
+    expect(stageFor(75).key).toBe("arrived");
+    expect(stageFor(90).key).toBe("onboard");
+    expect(stageFor(100).key).toBe("done");
+    expect(etaMinutes(0)).toBe(12);
+    expect(etaMinutes(70)).toBe(0);
+    expect(etaMinutes(100)).toBe(0);
+  });
+});
+
+describe("groups and blocking", () => {
+  it("splits the weekly fuel between members and driver", () => {
+    const g = seedGroups[0]!;
+    expect(groupMemberCount(g, [])).toBe(3);
+    expect(groupMemberCount(g, [g.id])).toBe(4);
+    expect(groupShare(g, [g.id])).toBe(30);
+    expect(COTISATION_DH).toBe(30);
+  });
+  it("hides blocked drivers, suspended trips and updates seats", () => {
+    const base = { myRides: [], hiddenTrips: [], bookings: [], blocked: [] };
+    expect(visibleDemoTrips(base)).toHaveLength(trips.length);
+    const first = trips[0]!;
+    expect(visibleDemoTrips({ ...base, blocked: [first.driver] }).some((t) => t.driver === first.driver)).toBe(false);
+    expect(visibleDemoTrips({ ...base, hiddenTrips: [first.id] }).some((t) => t.id === first.id)).toBe(false);
+    const booked = visibleDemoTrips({ ...base, bookings: [{ tripId: first.id, pay: "wallet", pickup: "x", status: "confirmé" }] }).find((t) => t.id === first.id);
+    expect(booked?.seats).toBe(first.seats - 1);
   });
 });
