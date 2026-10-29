@@ -2,6 +2,16 @@
 
 > Living doc. Updated every work session. Newest entry at the bottom of § Session log.
 
+## Demo-day checkpoint — footer, information pages and Android
+
+- Release checkpoint: `v0.1.0-demo.1` is the requested Android prerelease tag. Survey export `poolrkeb.json` contains 1,000 rows: 738 positive intent, 791 crowding at least sometimes, 719 costly transport, 523 strong stress/fatigue. Aggregates are in `src/lib/survey-results.ts`, full methodology in `docs/SURVEY-FINDINGS.md`, reproducible analysis in `scripts/survey-summary.mjs`. Source JSON is not committed. Landing and APK include these results; physical-phone testing remains pending.
+
+- Shared footer: `src/components/site-footer.tsx`, used by landing and informational pages; developer credit Chetaine Younes, GitHub project link, ENSA academic context, Afriquia explicitly a potential partnership (no agreement/discount confirmed).
+- New `/about`, `/help`, `/safety`, `/contact` routes in `src/components/information.tsx`; FAQ search/categories, safety explanation, contact copies feedback for GitHub (no server submission). Profile links to these pages.
+- Capacitor Android wrapper (`ma.rkeb.demo`): standalone client entry `src/mobile.tsx`, `mobile/`, `vite.mobile.config.ts`, `capacitor.config.ts`, native `android/` project. Build uses bundled assets, no hosted site required.
+- APK built successfully: `android/app/build/outputs/apk/debug/app-debug.apk`. Uses a complete portable Microsoft JDK 21 and Android SDK 36 under the pre-approved temporary opencode folder. Gradle needed `--max-workers=1` and `-Xmx768m -XX:ActiveProcessorCount=2` after a daemon crash with default parallelism.
+- Installation/rebuild instructions and phone acceptance steps: `docs/ANDROID-DEMO.md`. Typecheck and 14 tests passed; web/mobile builds passed; mobile client routes rendered at 390px without page errors. Physical-device APK check is still required before tomorrow's presentation.
+
 ## 1. What this is
 
 Clickable frontend prototype of a student carpool app for ENSA Tanger.

@@ -37,3 +37,8 @@ coverage/
 # Local bare mirror of the GitLab remote
 rkeb.git/
 .tanstack/
+dist-mobile/
+android/.gradle/
+android/local.properties
+android/**/build/
+*.apk

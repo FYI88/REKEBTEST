@@ -118,7 +118,7 @@ export const faq = [
   { q: "Pourquoi 5 DH, toujours ?", a: "Un prix fixe évite les négociations et reste accessible à un budget étudiant. Les conducteurs gagnent des éco-points en plus." },
   { q: "Comment je paie ?", a: "Trois options : Wallet (recharge cash au guichet BDE), carte de points gagnés en conduisant, ou cotisation essence hebdomadaire partagée." },
   { q: "Et si le conducteur annule ?", a: "Ta place est remboursée automatiquement sur ton wallet. Tu peux aussi annuler toi-même depuis Mes billets." },
-  { q: "Que fait le bouton SOS ?", a: "Il partage ta position avec ton contact d’urgence et l’administration ENSA. Tu peux aussi partager le lien du trajet à un proche." },
+  { q: "Que fait le bouton SOS ?", a: "Dans ce prototype, le SOS est une simulation : aucun contact ni service d’urgence n’est appelé. Le partage transmet un lien de trajet, pas une position GPS réelle. La page Sécurité explique ces limites." },
   { q: "Je n’ai pas de compte, je peux essayer ?", a: "Oui : le mode démo (persona Amine) rend toute l’app cliquable sans compte ni connexion réseau." },
 ] as const;
 

@@ -9,6 +9,8 @@ import { SeatDots, ThemeToggle } from "@/components/prototype";
 import { Button, Logo, Stamp, Tag } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import campus from "@/assets/campus-carpool.jpg";
+import { SiteFooter } from "@/components/site-footer";
+import { survey, surveyHighlights, surveyPercent } from "@/lib/survey-results";
 
 function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -190,7 +192,10 @@ export function Landing() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 pt-20">
-        <SectionTitle eyebrow="Notre questionnaire · 4 problèmes réels" title="Pourquoi Rkeb existe." />
+        <SectionTitle eyebrow={`Notre questionnaire · ${survey.responses.toLocaleString("fr-FR")} réponses`} title="Pourquoi Rkeb existe." />
+        <p className="mt-3 max-w-2xl text-sm text-muted-foreground">Résultats déclarés dans le questionnaire fourni au projet. Une intention d’essayer, pas encore un nombre d’utilisateurs.</p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{surveyHighlights.map((item) => <article key={item.label} className="rounded-xl border-2 border-ink bg-primary-soft p-5"><p className="font-display text-4xl font-extrabold">{surveyPercent(item.count)}</p><h3 className="mt-2 text-sm font-bold">{item.label}</h3><p className="mt-2 font-mono text-[10px] text-muted-foreground">{item.count}/1 000 · {item.detail}</p></article>)}</div>
+        <p className="mt-3 text-xs text-muted-foreground">26,2 % répondent négativement au covoiturage. Collecte et représentativité non documentées ; ces chiffres décrivent uniquement l’export reçu.</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["01", "Bus bondés et retards", "Manque de transport à certaines heures, arriver à l'heure devient un exploit."],
@@ -272,6 +277,7 @@ export function Landing() {
 
       <section className="mx-auto max-w-3xl px-5 pb-20">
         <SectionTitle id="faq" eyebrow="Tu hésites encore ?" title="Questions fréquentes." />
+        <Link to="/help" className="mt-3 inline-block text-sm font-bold text-primary underline">Toutes les questions et l’aide</Link>
         <div className="mt-6 grid gap-3">
           {faq.map((f) => <details key={f.q} className="group rounded-lg border-2 border-ink bg-card p-4 open:hard-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-display text-lg font-extrabold">{f.q}<ChevronDown size={18} className="shrink-0 transition group-open:rotate-180" /></summary>
@@ -295,9 +301,6 @@ export function Landing() {
       <Link to="/signup" className="flex-1"><Button variant="ink" className="h-11 w-full">Rejoindre</Button></Link>
     </div>
 
-    <footer className="border-t-2 border-ink px-5 py-8"><div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 font-mono text-xs text-muted-foreground">
-      <span>Prototype étudiant · ENSA Tanger · Design thinking 2026</span>
-      <nav aria-label="Pied de page" className="flex gap-4 font-bold uppercase"><Link to="/login">Connexion</Link><Link to="/signup">Inscription</Link><Link to="/app">Trajets</Link><Link to="/admin">Admin</Link></nav>
-    </div></footer>
+    <SiteFooter />
   </div>;
 }

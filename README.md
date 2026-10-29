@@ -56,6 +56,20 @@ Three roles: **passenger**, **driver**, **admin**. The UI is in French.
 
 ## Quick start
 
+### Android APK for demo day
+
+Download the [Android prerelease v0.1.0-demo.1](https://github.com/FYI88/RKEBPROJECT/releases/tag/v0.1.0-demo.1). Choose the APK under **Assets**. Android 7.0+; debug-signed prototype; physical-phone checks remain necessary.
+
+An Android demo wrapper is included in `android/`. The built APK is at `android/app/build/outputs/apk/debug/app-debug.apk` (generated locally, not tracked in Git). See [Android installation and rebuild instructions](docs/ANDROID-DEMO.md). The demo screens and assets are bundled for offline use; real login and external links require internet access.
+
+### Student questionnaire
+
+The supplied survey export contains **1,000 response rows**: 73.8% positive carpooling intent, 79.1% reporting crowding at least sometimes, 71.9% finding transport costly and 52.3% reporting strong stress/fatigue impact. See [full counts, definitions and limitations](docs/SURVEY-FINDINGS.md). These are survey findings, not active-user metrics.
+
+### About, help and project credits
+
+The shared footer links to `/about` (project, Chetaine Younes, ENSA academic context and potential collaborations), `/help` (searchable FAQ), `/safety` (boarding checks and prototype limitations), and `/contact` (feedback preparation and GitHub issues). Afriquia is a potential fuel-partnership idea only: there is no confirmed contract or discount.
+
 Requires **Node.js 20+** and npm.
 
 ```bash

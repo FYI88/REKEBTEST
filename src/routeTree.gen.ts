@@ -10,13 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DriverRouteImport } from './routes/driver'
 import { Route as GroupsRouteImport } from './routes/groups'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TripsRouteImport } from './routes/trips'
 import { Route as WalletRouteImport } from './routes/wallet'
@@ -29,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -39,6 +48,11 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DriverRoute = DriverRouteImport.update({
   id: '/driver',
   path: '/driver',
@@ -47,6 +61,11 @@ const DriverRoute = DriverRouteImport.update({
 const GroupsRoute = GroupsRouteImport.update({
   id: '/groups',
   path: '/groups',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -62,6 +81,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const RequestsRoute = RequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyRoute = SafetyRouteImport.update({
+  id: '/safety',
+  path: '/safety',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -97,13 +121,17 @@ const TrackTripIdRoute = TrackTripIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRoute
   '/groups': typeof GroupsRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/requests': typeof RequestsRoute
+  '/safety': typeof SafetyRoute
   '/signup': typeof SignupRoute
   '/trips': typeof TripsRoute
   '/wallet': typeof WalletRoute
@@ -113,13 +141,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRoute
   '/groups': typeof GroupsRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/requests': typeof RequestsRoute
+  '/safety': typeof SafetyRoute
   '/signup': typeof SignupRoute
   '/trips': typeof TripsRoute
   '/wallet': typeof WalletRoute
@@ -130,13 +162,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRoute
   '/groups': typeof GroupsRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/requests': typeof RequestsRoute
+  '/safety': typeof SafetyRoute
   '/signup': typeof SignupRoute
   '/trips': typeof TripsRoute
   '/wallet': typeof WalletRoute
@@ -148,13 +184,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/app'
+    | '/contact'
     | '/driver'
     | '/groups'
+    | '/help'
     | '/login'
     | '/profile'
     | '/requests'
+    | '/safety'
     | '/signup'
     | '/trips'
     | '/wallet'
@@ -164,13 +204,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/admin'
     | '/app'
+    | '/contact'
     | '/driver'
     | '/groups'
+    | '/help'
     | '/login'
     | '/profile'
     | '/requests'
+    | '/safety'
     | '/signup'
     | '/trips'
     | '/wallet'
@@ -180,13 +224,17 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/app'
+    | '/contact'
     | '/driver'
     | '/groups'
+    | '/help'
     | '/login'
     | '/profile'
     | '/requests'
+    | '/safety'
     | '/signup'
     | '/trips'
     | '/wallet'
@@ -197,13 +245,17 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   AppRoute: typeof AppRoute
+  ContactRoute: typeof ContactRoute
   DriverRoute: typeof DriverRoute
   GroupsRoute: typeof GroupsRoute
+  HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RequestsRoute: typeof RequestsRoute
+  SafetyRoute: typeof SafetyRoute
   SignupRoute: typeof SignupRoute
   TripsRoute: typeof TripsRoute
   WalletRoute: typeof WalletRoute
@@ -221,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -235,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/driver': {
       id: '/driver'
       path: '/driver'
@@ -247,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/groups'
       fullPath: '/groups'
       preLoaderRoute: typeof GroupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -268,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: '/requests'
       fullPath: '/requests'
       preLoaderRoute: typeof RequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety': {
+      id: '/safety'
+      path: '/safety'
+      fullPath: '/safety'
+      preLoaderRoute: typeof SafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -317,13 +397,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   AppRoute: AppRoute,
+  ContactRoute: ContactRoute,
   DriverRoute: DriverRoute,
   GroupsRoute: GroupsRoute,
+  HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RequestsRoute: RequestsRoute,
+  SafetyRoute: SafetyRoute,
   SignupRoute: SignupRoute,
   TripsRoute: TripsRoute,
   WalletRoute: WalletRoute,
