@@ -80,7 +80,7 @@ export type ChatMessage = { from: "me" | "them"; text: string; time: string };
 export const seedMessages: ChatMessage[] = [
   { from: "them", text: "Salam ! Je passe au rond-point Marjane à 07:25 pile.", time: "21:02" },
   { from: "me", text: "Parfait, je serai devant la pharmacie.", time: "21:04" },
-  { from: "them", text: "Ok. Voiture blanche, plaque 45-A-2841 👍", time: "21:05" },
+  { from: "them", text: "Ok. Voiture blanche, plaque 45-A-2841.", time: "21:05" },
 ];
 
 export type NotifIcon = "booking" | "flash" | "wallet" | "route";

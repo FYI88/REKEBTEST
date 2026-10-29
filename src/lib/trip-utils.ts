@@ -61,12 +61,12 @@ export function qrFor(seed: string): { cells: boolean[]; code: string } {
 }
 
 const replies: [RegExp, string][] = [
-  [/où|ou es|where/i, "J’arrive dans 2 minutes, je mets les warnings 🚗"],
-  [/pickup|arrive|là/i, "Parfait, à tout de suite 👍"],
+  [/où|ou es|where/i, "J’arrive dans 2 minutes, je mets les warnings."],
+  [/pickup|arrive|là/i, "Parfait, à tout de suite."],
   [/merci|shukran/i, "Avec plaisir, à demain !"],
 ];
 
 /** Réponse automatique du conducteur en mode démo. */
 export function demoReply(text: string): string {
-  return replies.find(([re]) => re.test(text))?.[1] ?? "Ok, noté ! 👍";
+  return replies.find(([re]) => re.test(text))?.[1] ?? "Ok, noté !";
 }

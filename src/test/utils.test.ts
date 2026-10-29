@@ -50,6 +50,6 @@ describe("trip helpers", () => {
   });
   it("replies to chat messages", () => {
     expect(demoReply("Tu es où ?")).toContain("2 minutes");
-    expect(demoReply("blabla")).toBe("Ok, noté ! 👍");
+    expect(demoReply("blabla")).toBe("Ok, noté !");
   });
 });
