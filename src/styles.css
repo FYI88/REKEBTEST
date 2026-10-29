@@ -187,6 +187,17 @@
 .theme-nuit .site-footer a:hover { color: #f0b08d; }
 .theme-nuit .site-footer a:focus-visible { outline-color: #f0b08d; }
 
+.route-map .leaflet-container { height: 100%; width: 100%; background: #f4f0e4; font-family: var(--font-sans); z-index: 0; }
+.route-map .leaflet-tile { filter: grayscale(1) sepia(.16) contrast(1.03); }
+.theme-nuit .route-map .leaflet-container { background: #25332e; }
+.theme-nuit .route-map .leaflet-tile { filter: grayscale(1) sepia(.2) invert(.82) hue-rotate(165deg) contrast(.9); }
+.rkeb-map-marker { background: transparent; border: 0; }
+.rkeb-map-marker span { display: grid; width: 28px; height: 28px; place-items: center; border: 2px solid #30463d; border-radius: 50%; background: #f8f4ea; color: #30463d; font: 700 12px var(--font-mono); box-shadow: 1px 2px 0 #30463d55; }
+.theme-nuit .rkeb-map-marker span { border-color: #e9e5d7; background: #202925; color: #e9e5d7; }
+.rkeb-map-tooltip { border: 1px solid #30463d !important; border-radius: 3px !important; background: #f8f4ea !important; color: #30463d !important; box-shadow: 1px 2px 0 #30463d33 !important; font: italic 12px Georgia, serif !important; }
+.rkeb-map-tooltip::before { border-top-color: #30463d !important; }
+.theme-nuit .rkeb-map-tooltip { border-color: #a7b4a6 !important; background: #202925 !important; color: #e9e5d7 !important; }
+
 .route-sketch { --route: #b75d35; }
 .theme-nuit .route-sketch { --route: #f0b08d; }
 

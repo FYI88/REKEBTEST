@@ -4,6 +4,9 @@
 > (aucun email requis, personne Amine, 35 DH, 120 pts, 1 billet terminé).
 > Un refresh ne casse rien (état persisté). Fausse manip : `/profile` → **« Recommencer la démo »**.
 > L'auth réelle (code email / mot de passe) existe aussi — à montrer en option, hors chrono.
+> **Test sur téléphone avant la présentation :** installer le dernier APK, vérifier le plein écran,
+> le bouton retour et le bandeau hors ligne en mode avion ; ouvrir un trajet pour tester la vraie carte.
+> La carte et le calcul de route nécessitent Internet ; sans réseau, le croquis illustré prend le relais.
 
 ## 0:00 — Accroche (`/`)
 
@@ -28,6 +31,7 @@ Basculer **« Je conduis »** : montrer le formulaire (pickups, places, récurre
 
 Repassez **« Je cherche »** si besoin. Cliquer la carte Yasmine.
 Montrer : photo + plaque + badge vérifié, **pickups** (choisir rond-point Marjane),
+carte OpenStreetMap avec itinéraire et arrêts numérotés (centres de quartier approximatifs),
 avis **Ils en parlent** (si présents — base fraîche = section masquée, c'est normal),
 boutons **SOS** + **Partager en live** (ouvrir le modal, fermer).
 Paiement : choisir **Wallet**, cliquer **Réserver** → « C'est réservé ».
@@ -60,3 +64,23 @@ et « on passe au prototype ».
 - Mauvais clic : continuer, tout est cliquable, rien n'est destructeur.
 - État bizarre : `/profile` → **Recommencer la démo**, reprendre au point suivant.
 - Serveur tombé : `npm run dev` dans le dossier, attendre « ready », rouvrir `:8080`.
+- Carte indisponible : expliquer que la géolocalisation exacte n'est pas encore activée ; le croquis hors ligne garde le quartier, l'ordre des pickups et l'ENSA visibles.
+- Mode avion : le bandeau signale l'absence d'Internet et **Continuer en mode démo** mène aux trajets locaux. La connexion et la carte réelle ont besoin du réseau.
+
+## Retours du test terrain — version Android
+
+Pendant les essais avec l'APK sur téléphone, l'équipe a relevé trois points concrets : l'application ne s'affichait pas en plein écran, le bandeau hors ligne ne signalait pas correctement la perte de connexion, et le croquis de trajet gagnerait à être une carte de rues. Ces retours ont déclenché la version suivante :
+
+- **Plein écran Android** : barres système masquées par défaut ; balayage depuis le bord les révèle temporairement.
+- **Connexion hors ligne** : état réseau natif Android + vérification d'accès Internet, avec une action pour continuer en mode démo.
+- **Carte du trajet** : fond OpenStreetMap, route routière OSRM et arrêts numérotés/labellisés ; coordonnées des arrêts approximées au centre du quartier, pas de GPS exact. Si le service de calcul d'itinéraire tombe, une ligne pointillée indicative apparaît ; si la carte Internet est indisponible, le croquis hors ligne s'affiche.
+
+Après installation de la nouvelle APK, refaire ces trois vérifications sur le téléphone et noter les résultats ici avant la présentation. La carte en direct nécessite une connexion Internet.
+
+### Test cycle 2 � fixes prompted by user and team phone feedback
+
+Build observed problems into the presentation story: we tested the previous APK on a phone, other testers reported that fullscreen and offline detection did not behave as expected, and the route sketch felt less useful than a real map. We turned those reports into a new test cycle instead of assuming the browser preview represented Android correctly.
+
+The follow-up APK (demo.5) addresses them with immersive Android system bars; native Capacitor network state plus an Internet reachability check and a visible demo-mode action; and a journal-coloured OpenStreetMap view with a road route and labelled numbered stops. Exact pickup GPS coordinates are not part of the prototype, so pins represent approximate pickup locations around district centres. If route calculation is unavailable, the map shows labelled dashed straight segments; if map tiles are unavailable, the original sketch appears.
+
+**Retest on a physical phone after installing demo.5:** confirm fullscreen at launch and after resume; enable airplane mode and look for the banner and working demo shortcut; restore Internet, open /ride/1, and check map tiles, route, and labels. Record any remaining failures here. Browser checks do not count as proof of native fullscreen or airplane-mode detection.

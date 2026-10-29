@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, BadgeCheck, Ban, Car, Check, Clock, Coins, Eye, EyeOff, Flag, Fuel, Gauge, Megaphone, Navigation as NavIcon, UserX, GraduationCap, IdCard, Leaf, LogOut, Mail, MapPin, MessageCircle, Music, Navigation, Radio, RotateCcw, Search, Send, Share2, ShieldAlert, ShieldCheck, Star, Timer, Trophy, Users, Wallet, X } from "lucide-react";
 import { toast } from "sonner";
 import { RouteSketch } from "@/components/route-sketch";
+import { RouteMap } from "@/components/route-map";
 import { leaderboard, rechargeRequests, reviews, seedReports, transactions, trips, verificationQueue, weeklyStats, type ChatMessage, type Report, type Review, type Trip } from "@/lib/demo-data";
 import { bookSeat, cancelBooking, rateTrip, requestRecharge, useMyBookings, useMyWallet, useTrip } from "@/lib/db";
 import { COTISATION_DH, COTISATION_GROUP_ID, chatFor, findDemoTrip, ledgerEntry, resetDemo, setStore, useStore, type Pay } from "@/lib/store";
@@ -208,7 +209,7 @@ function RideDetailBody({ t, rideId, session, userId, dbReviews, booked, balance
           <div><p className="font-mono text-xs font-bold uppercase text-muted-foreground">{t.date} · {t.vehicle}</p><h1 className="font-display text-5xl font-extrabold tracking-tight">{t.time} <span className="text-primary">→</span> {t.arrival}</h1><p className="mt-1 text-sm font-semibold">{routeLabel(t)}</p></div>
           <Tag className="bg-accent text-accent-foreground"><Clock size={11} />Alerte retard activée</Tag>
         </div>
-        <RouteSketch from={t.from} stops={t.pickups ?? []} evening={t.slot === "Soir"} />
+        <RouteMap from={t.from} stops={t.pickups ?? []} evening={t.slot === "Soir"} />
         <div className="rounded-lg border-2 border-ink bg-card p-5">
           <h2 className="font-display text-xl font-extrabold">Choisis ton pickup</h2>
           <div className="mt-3 grid gap-2">{(t.pickups ?? []).map((p, i) => <label key={p} className="flex items-center gap-3 rounded-md border-2 border-ink p-3 has-[:checked]:bg-primary-soft">
