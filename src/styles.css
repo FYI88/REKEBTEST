@@ -169,6 +169,38 @@
 @keyframes reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
+/* Field-journal figure: paper, fine ink, margin notes, one restrained orange route. */
+.site-footer { background: #f8f4ea; color: #30463d; border-color: #30463d; }
+.site-footer-heading { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+.site-footer-caption { color: #59665b; }
+.site-footer-margin-note { font-family: Georgia, "Times New Roman", serif; font-style: italic; }
+.site-footer-credit, .site-footer figcaption { border-color: #c8cbbd; }
+.site-footer-author, .site-footer-figure-label { color: #30463d; }
+.site-footer a { text-underline-offset: 4px; }
+.site-footer a:hover { color: #a04b28; }
+.site-footer a:focus-visible { outline-color: #a04b28; }
+.theme-nuit .site-footer { background: #202925; color: #e9e5d7; border-color: #a7b4a6; }
+.theme-nuit .site-footer-caption { color: #bdc6b6; }
+.theme-nuit .site-footer-author, .theme-nuit .site-footer-figure-label { color: #e9e5d7; }
+.theme-nuit .site-footer-credit, .theme-nuit .site-footer figcaption { border-color: #59665b; }
+.theme-nuit .site-footer-sketch { filter: invert(1) hue-rotate(160deg); }
+.theme-nuit .site-footer a:hover { color: #f0b08d; }
+.theme-nuit .site-footer a:focus-visible { outline-color: #f0b08d; }
+
+/* Temporary footer comparison variant. */
+.site-footer.site-footer-postcard { background: #082d30; color: #f4ebd3; }
+.site-footer-postcard .site-footer-heading { font-family: var(--font-display); font-weight: 800; }
+.site-footer-postcard .site-footer-margin-note { font-family: var(--font-sans); font-style: normal; }
+.site-footer-postcard .site-footer-caption { color: #b9ccbf; }
+.site-footer-postcard .site-footer-author { color: #f4ebd3; }
+.site-footer-postcard .site-footer-credit { border-color: #42665c; }
+.site-footer-postcard a:hover { color: #edb94f; }
+.site-footer-postcard a:focus-visible { outline-color: #edb94f; }
+.site-footer button[aria-pressed="true"] { background: #30463d; color: #f8f4ea; }
+.theme-nuit .site-footer button[aria-pressed="true"],
+.site-footer-postcard button[aria-pressed="true"] { background: #f4ebd3; color: #082d30; }
+.site-footer button:focus-visible { outline-color: currentColor; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

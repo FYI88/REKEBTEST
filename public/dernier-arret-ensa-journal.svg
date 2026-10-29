@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" fill="none">
+  <title>Étude de trajet — Tanger vers ENSA</title>
+  <desc>Croquis à l’encre : les terrasses de Tanger, une petite voiture et les palmiers du campus sont reliés par un trait orange. Géographie imaginaire.</desc>
+  <defs>
+    <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><path d="M0 0V7" stroke="#30463D" stroke-width=".7" stroke-opacity=".35"/></pattern>
+    <g id="palm" stroke="#30463D" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 0Q-5-42 2-89M5 0Q0-44 5-89" stroke-width="1.4"/>
+      <path d="M1-88Q-22-113-46-91Q-18-98 1-88Q-18-97-32-71M3-89Q-3-119 15-129Q5-107 3-89Q22-116 44-103Q19-103 3-89Q27-100 43-78Q20-90 3-89" stroke-width="1.6"/>
+      <path d="M-4-14L3-17M-4-26L2-29M-3-39L2-42M-2-52L3-55M0-65L4-68" stroke-width=".8"/>
+    </g>
+  </defs>
+  <!-- Quiet construction lines and coastal contours, rather than a basemap. -->
+  <g stroke="#30463D" stroke-width=".8" opacity=".18">
+    <path d="M45 254H1149M79 264V271M382 264V271M692 264V271M1113 264V271"/>
+    <path d="M47 213Q173 146 320 184T606 179T882 157T1151 176M49 218Q174 151 321 189T607 184T883 162T1153 181"/>
+    <path d="M71 57V239M437 57V239M852 57V239M1122 57V239" stroke-dasharray="2 7"/>
+    <path d="M465 95H796M460 101H711"/>
+  </g>
+  <!-- Tangier: subtly irregular pen lines, terrace parapets, hatching. -->
+  <g stroke="#30463D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M98 245L99 157L161 158L160 132L212 133L213 245M91 155L165 156M155 130L219 132"/>
+    <path d="M209 245L209 183L272 182L273 153L324 154L325 245M203 181L278 180M267 151L331 152"/>
+    <path d="M325 245L326 196L371 197L372 175L404 176L405 245M320 194L376 195M368 173L410 175"/>
+    <path d="M113 245V224Q124 204 136 224V245M118 245V226Q124 214 131 226V245"/>
+    <path d="M116 176H129V194H116ZM142 176H155V194H142ZM177 150H190V170H177ZM227 201H240V218H227ZM290 172H304V191H290ZM345 213H358V230H345ZM382 190H394V207H382Z"/>
+    <path d="M180 131V116M166 115L196 117M185 116L189 108" stroke-width="1"/>
+    <path d="M104 238H110M144 238H203M218 238H263M332 239H399" stroke-width=".8"/>
+    <path d="M163 158L163 242H174V159M275 184V242H286V184M375 198V242H384V210" fill="url(#hatch)" stroke-width=".6"/>
+    <path d="M83 248Q207 244 420 249M86 251L158 252M283 251L412 253" stroke-width=".8"/>
+  </g>
+  <!-- A small car drawn like a field-notebook detail, without cartoon fill. -->
+  <g transform="translate(557 212) rotate(-5 53 26)" stroke="#30463D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 33L13 29L29 9L66 8L86 28L102 33L106 49L0 50ZM20 29L33 14L44 14L44 29ZM50 14L64 14L78 28L50 29Z"/>
+    <path d="M2 39H9M94 36H103M61 35H67M4 45H102" stroke-width="1"/>
+    <circle cx="23" cy="49" r="10" fill="#F8F4EA"/><circle cx="23" cy="49" r="4"/>
+    <circle cx="84" cy="49" r="10" fill="#F8F4EA"/><circle cx="84" cy="49" r="4"/>
+    <path d="M11 63Q47 67 100 62" stroke-width=".8" opacity=".4"/>
+  </g>
+  <!-- Campus: imagined architecture, not an official building drawing. -->
+  <g stroke="#30463D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M880 245V192L946 193L947 151L1030 150L1031 192L1115 191L1116 245M873 190L945 191M1032 190L1123 189M941 149L1036 148M946 151L958 139L1018 138L1030 150"/>
+    <path d="M969 245V204H1008V245M988 205V245M970 220H1006M959 167H1016"/>
+    <path d="M894 207H906V224H894ZM920 207H932V224H920ZM1046 207H1058V224H1046ZM1073 207H1085V224H1073ZM1098 207H1106V224H1098Z"/>
+    <path d="M949 194V245H959V194M1034 195V245H1041V195" fill="url(#hatch)" stroke-width=".6"/>
+    <path d="M867 248Q987 245 1132 249M870 252L945 253M1031 252L1137 253" stroke-width=".8"/>
+  </g>
+  <use href="#palm" transform="translate(456 247) scale(.8)"/>
+  <use href="#palm" transform="translate(839 246) scale(.85)"/>
+  <use href="#palm" transform="translate(1150 247) scale(.7)"/>
+  <!-- One orange route is the entire colour argument. -->
+  <path d="M84 287C239 259 359 286 470 292S661 314 747 291S941 270 1118 284" stroke="#B75D35" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="114" cy="283" r="4" fill="#B75D35"/>
+  <circle cx="1091" cy="282" r="4" fill="#B75D35"/>
+  <path d="M478 271L509 262L503 274L540 262" stroke="#B75D35" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Leader lines let small details carry information, like figure annotations. -->
+  <g stroke="#30463D" stroke-width=".8" opacity=".8">
+    <path d="M286 115L312 81H385M610 196L644 139H724M986 127L1012 80H1114"/>
+    <path d="M114 298V325H175M1091 297V325H1034"/>
+  </g>
+  <g fill="#30463D" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="16">
+    <text x="314" y="71">les toits de Tanger</text>
+    <text x="652" y="129">une place à partager</text>
+    <text x="1018" y="70">le campus</text>
+  </g>
+  <g fill="#30463D" font-family="monospace" font-size="12" letter-spacing="2">
+    <text x="184" y="330">TANGER</text>
+    <text x="985" y="330">ENSA</text>
+  </g>
+  <path d="M727 197L734 194L741 197M752 183L759 180L766 183" stroke="#30463D" stroke-width="1" stroke-linecap="round"/>
+</svg>

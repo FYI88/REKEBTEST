@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="480" viewBox="0 0 1440 480" fill="none">
+  <title>Dernier arrêt : ENSA</title>
+  <desc>Une route imaginaire relie les toits de Tanger au campus, entre palmiers et petite voiture crème au sillage orange.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#103D3D"/><stop offset="1" stop-color="#082D30"/></linearGradient>
+    <linearGradient id="fade" x2="0" y1="360" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#082D30" stop-opacity="0"/><stop offset="1" stop-color="#082D30"/></linearGradient>
+    <pattern id="map" width="310" height="230" patternUnits="userSpaceOnUse" patternTransform="rotate(-14)"><path d="M-20 70H330M80-20V250M220-20V250M-20 175H330" stroke="#A9CEC1" stroke-opacity=".07" stroke-width="2"/><path d="M95 85H205V160H95Z" stroke="#A9CEC1" stroke-opacity=".05"/></pattern>
+    <g id="palm"><path d="M0 0C-3-29 8-62 0-98" stroke="#B7CDB4" stroke-width="7" stroke-linecap="round"/><path d="M0-96C-30-120-48-108-54-87C-34-101-17-99 0-96ZM0-96C-13-132 9-147 21-144C7-128 3-112 0-96ZM0-96C21-128 48-119 56-100C34-109 17-105 0-96ZM0-96C29-101 44-81 41-64C30-80 15-90 0-96ZM0-96C-21-98-34-76-31-62C-22-78-13-87 0-96Z" fill="#80A894"/></g>
+    <g id="pin"><path d="M0 0C-5-9-19-21-19-35A19 19 0 0 1 19-35C19-21 5-9 0 0Z" fill="#EDB94F"/><circle cy="-35" r="6" fill="#103D3D"/></g>
+  </defs>
+  <path fill="url(#sky)" d="M0 0H1440V480H0Z"/>
+  <path fill="url(#map)" d="M0 0H1440V480H0Z"/>
+  <!-- Tangier's bay and layered hills: deliberately not a navigation map. -->
+  <circle cx="1064" cy="102" r="52" fill="#EDB94F" fill-opacity=".13"/>
+  <circle cx="1064" cy="102" r="34" stroke="#EDB94F" stroke-opacity=".45"/>
+  <path d="M0 230C126 184 183 226 290 199S461 137 588 193S778 220 910 175S1173 149 1440 207V373H0Z" fill="#1C4B49"/>
+  <path d="M0 270C185 220 241 281 425 246S674 220 829 253S1147 199 1440 243V382H0Z" fill="#285A53"/>
+  <path d="M0 296C140 283 212 308 348 289" stroke="#8EB7A6" stroke-opacity=".35" stroke-width="2"/>
+  <path d="M20 309C141 298 192 317 281 306" stroke="#8EB7A6" stroke-opacity=".2" stroke-width="2"/>
+  <!-- Rooftops: chalk walls, rooftop terraces and an arched doorway. -->
+  <g stroke="#103D3D" stroke-width="3" stroke-linejoin="round">
+    <path d="M87 276V184H159V165H216V276" fill="#B9C6AE"/>
+    <path d="M69 190H168M151 170H223" stroke="#F4EBD3" stroke-width="5"/>
+    <path d="M204 280V210H267V181H327V280" fill="#E6DFC5"/>
+    <path d="M197 211H277M260 182H334" stroke="#F4EBD3" stroke-width="5"/>
+    <path d="M321 286V224H393V202H435V286" fill="#9DB8A4"/>
+    <path d="M312 225H399M386 203H441" stroke="#D1D6BC" stroke-width="5"/>
+    <path d="M120 276V250A14 14 0 0 1 148 250V276" fill="#39665A"/>
+    <path d="M103 209H118V229H103ZM137 209H152V229H137ZM176 189H191V209H176ZM222 230H238V248H222ZM284 204H302V224H284ZM351 242H367V261H351ZM405 222H419V241H405Z" fill="#39665A" stroke="none"/>
+    <path d="M176 164V149M162 148H189" stroke="#9DB8A4" stroke-width="2"/>
+  </g>
+  <!-- Campus: an imagined ENSA silhouette rather than a literal elevation. -->
+  <g stroke="#103D3D" stroke-width="3" stroke-linejoin="round">
+    <path d="M974 282V222H1066V176H1181V222H1303V282" fill="#DADCC2"/>
+    <path d="M1066 176H1181L1165 160H1083Z" fill="#F4EBD3"/>
+    <path d="M960 222H1066M1181 222H1316" stroke="#F4EBD3" stroke-width="6"/>
+    <path d="M1089 282V231H1156V282" fill="#3D6C61"/>
+    <path d="M1122 233V282M1089 251H1156" stroke="#B9C6AE" stroke-width="2"/>
+    <path d="M992 241H1010V260H992ZM1027 241H1045V260H1027ZM1201 241H1219V260H1201ZM1236 241H1254V260H1236ZM1271 241H1289V260H1271Z" fill="#3D6C61" stroke="none"/>
+    <path d="M1090 196H1157" stroke="#3D6C61" stroke-width="4"/>
+  </g>
+  <use href="#palm" transform="translate(487 285) scale(.9)"/>
+  <use href="#palm" transform="translate(932 283) scale(.8)"/>
+  <use href="#palm" transform="translate(1346 294) scale(1.1)"/>
+  <path d="M0 334C176 296 367 309 530 315S790 279 1002 295S1252 304 1440 316V480H0Z" fill="#082D30"/>
+  <!-- The road is one continuous gesture, like the orange Rkeb logo. -->
+  <path d="M-35 380C164 300 337 339 468 361S703 424 849 362S1113 307 1473 364" stroke="#42665C" stroke-width="64"/>
+  <path d="M-35 380C164 300 337 339 468 361S703 424 849 362S1113 307 1473 364" stroke="#F4EBD3" stroke-width="2.5" stroke-dasharray="12 15"/>
+  <use href="#pin" transform="translate(238 324)"/>
+  <use href="#pin" transform="translate(1175 313)"/>
+  <g fill="#F4EBD3" font-family="monospace" font-size="14" font-weight="700" letter-spacing="3">
+    <text x="205" y="405">TANGER</text>
+    <text x="1144" y="395">ENSA</text>
+  </g>
+  <!-- Orange swoosh + a little shared ride, travelling right towards campus. -->
+  <path d="M552 364L614 352L600 374L679 352" stroke="#F28A45" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(687 305) rotate(-7 62 35)">
+    <ellipse cx="63" cy="70" rx="74" ry="10" fill="#052629" fill-opacity=".4"/>
+    <path d="M9 33L28 29L43 7H82L105 29L121 36Q127 39 127 48V59H0V44Q0 35 9 33Z" fill="#F4EBD3" stroke="#103D3D" stroke-width="3"/>
+    <path d="M37 29L48 13H61V29ZM68 13H79L96 29H68Z" fill="#397068"/>
+    <path d="M4 47H123" stroke="#D3CBAE" stroke-width="2"/>
+    <path d="M110 37H122V43H110" fill="#EDB94F"/>
+    <path d="M2 37H9V44H2" fill="#F28A45"/>
+    <circle cx="27" cy="59" r="13" fill="#103D3D"/><circle cx="27" cy="59" r="6" fill="#B9C6AE"/>
+    <circle cx="101" cy="59" r="13" fill="#103D3D"/><circle cx="101" cy="59" r="6" fill="#B9C6AE"/>
+    <path d="M72 37H80" stroke="#103D3D" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <path d="M567 163L575 159L583 163M597 145L605 141L613 145" stroke="#B9C6AE" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"/>
+  <path fill="url(#fade)" d="M0 360H1440V480H0Z"/>
+</svg>
