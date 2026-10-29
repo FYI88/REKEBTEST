@@ -58,7 +58,7 @@ Three roles: **passenger**, **driver**, **admin**. The UI is in French.
 
 ### Android APK for demo day
 
-Download the [Android prerelease v0.1.0-demo.1](https://github.com/FYI88/RKEBPROJECT/releases/tag/v0.1.0-demo.1). Choose the APK under **Assets**. Android 7.0+; debug-signed prototype; physical-phone checks remain necessary.
+Download the [Android prerelease v0.1.0-demo.2](https://github.com/FYI88/RKEBPROJECT/releases/tag/v0.1.0-demo.2). Choose the APK under **Assets**. Includes the Rkeb launcher and splash logo. Android 7.0+; debug-signed prototype; physical-phone checks remain necessary.
 
 An Android demo wrapper is included in `android/`. The built APK is at `android/app/build/outputs/apk/debug/app-debug.apk` (generated locally, not tracked in Git). See [Android installation and rebuild instructions](docs/ANDROID-DEMO.md). The demo screens and assets are bundled for offline use; real login and external links require internet access.
 

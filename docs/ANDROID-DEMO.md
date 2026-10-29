@@ -2,6 +2,8 @@
 
 ## Install the APK
 
+Current download: [v0.1.0-demo.2 — branded Rkeb icon](https://github.com/FYI88/RKEBPROJECT/releases/tag/v0.1.0-demo.2). It has Android version code 2 and can update demo.1 when signed by the same machine-local key.
+
 The locally built, debug-signed APK is:
 
 `android/app/build/outputs/apk/debug/app-debug.apk`
@@ -18,6 +20,8 @@ The locally built, debug-signed APK is:
 This is a Capacitor Android wrapper containing the client demo. No hosted web server is required. It is a demo APK, not a Play Store release. The debug signing key is machine-local; rebuilding on another machine can require uninstalling the previous demo APK first.
 
 ## Rebuild
+
+To regenerate launcher and splash images from `public/rkeb-logo.png`, install Pillow and run `python scripts/android-branding.py` before building Android.
 
 Requirements: Node.js 22+, a complete JDK 21, Android SDK platform 36 and SDK build tools. Android Studio can provide the SDK and manage installation.
 

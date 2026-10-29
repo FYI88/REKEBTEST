@@ -4,6 +4,8 @@
 
 ## Demo-day checkpoint — footer, information pages and Android
 
+- Branding update `v0.1.0-demo.2`: launcher icons (all five densities, legacy/round/adaptive) and splash images use `public/rkeb-logo.png` on cream. Regenerate with `scripts/android-branding.py` (Pillow). Version code 2; Android build and signature verification passed. Native launcher appearance still needs a phone check.
+
 - Release checkpoint: `v0.1.0-demo.1` is the requested Android prerelease tag. Survey export `poolrkeb.json` contains 1,000 rows: 738 positive intent, 791 crowding at least sometimes, 719 costly transport, 523 strong stress/fatigue. Aggregates are in `src/lib/survey-results.ts`, full methodology in `docs/SURVEY-FINDINGS.md`, reproducible analysis in `scripts/survey-summary.mjs`. Source JSON is not committed. Landing and APK include these results; physical-phone testing remains pending.
 
 - Shared footer: `src/components/site-footer.tsx`, used by landing and informational pages; developer credit Chetaine Younes, GitHub project link, ENSA academic context, Afriquia explicitly a potential partnership (no agreement/discount confirmed).
