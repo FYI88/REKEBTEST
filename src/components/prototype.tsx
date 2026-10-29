@@ -185,7 +185,7 @@ export function Dashboard() {
       </div>
 
       {now.length > 0 && <section className="mt-8">
-        <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold"><Zap size={20} className="fill-accent" />Last minute</h2>
+        <h2 className="font-display text-2xl font-extrabold">Last minute</h2>
         <div className="mt-3 flex gap-3 overflow-x-auto pb-2">{now.map((t) =>
           <Link key={t.id} to="/ride/$rideId" params={{ rideId: t.id }} className="press flex min-w-64 items-center gap-3 rounded-lg border-2 border-ink bg-ink p-3 text-ink-foreground hard-sm">
             <Avatar trip={t} /><div className="min-w-0 flex-1"><p className="font-display text-xl font-extrabold">{t.time} · {t.from}</p><p className="font-mono text-[10px] uppercase text-ink-muted">{t.seats} place · part dans 20 min</p></div><ArrowUpRight size={18} />
