@@ -59,8 +59,8 @@ Three roles: **passenger**, **driver**, **admin**. The UI is in French.
 Requires **Node.js 20+** and npm.
 
 ```bash
-git clone https://github.com/<your-user>/rkeb.git
-cd rkeb
+git clone https://github.com/FYI88/RKEBPROJECT.git
+cd RKEBPROJECT
 npm install
 cp .env.example .env     # optional: demo mode works without any Supabase keys
 npm run dev              # http://localhost:8080
