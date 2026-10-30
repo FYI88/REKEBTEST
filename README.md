@@ -127,7 +127,7 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 - Access guard: real admins or demo mode only.
 
 ### Platform
-- Three themes: **Tanger** (default), **ENSA** (institutional blue/amber), **Nuit** (dark), persisted and applied before first paint (no flash).
+- Three themes: **ENSA** (default; institutional blue/amber), **Tanger** (opt-in Billet de Tanger), **Nuit** (opt-in dark), persisted and applied before first paint (no flash).
 - Persistent notifications (unread counter, mark all as read).
 - Toast feedback for every important action.
 - Installable web app manifest, French 404 and error pages, per-route page titles.
@@ -147,7 +147,7 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 | `/trips` | **My tickets** | Tabs *À venir* and *Historique*, each ticket with pickup, payment tag, QR boarding code, cancel (with confirmation) and star rating. |
 | `/wallet` | **Wallet** | Balance and "≈ N trips", cash top-up modal (20 / 50 / 100 DH → code to show at the BDE desk), points card with progress bar, fuel pool, monthly subscription (coming soon), transaction history. |
 | `/chat/$tripId` | **Trip chat** | Driver header with masked number, message log, quick replies, text input. |
-| `/profile` | **Profile** | Identity (filière, CNE, email), ride counters, passenger/driver mode, theme picker (Tanger / ENSA / Nuit), preferred vibe, **Ton impact** card, Top helpers leaderboard, admin console link, sign out, reset demo. |
+| `/profile` | **Profile** | Identity (filière, CNE, email), ride counters, passenger/driver mode, theme picker (ENSA / Tanger / Nuit), preferred vibe, **Ton impact** card, Top helpers leaderboard, admin console link, sign out, reset demo. |
 | `/requests` | **Ride requests** | Tabs *Je cherche une place* (post a request, track its status, see the driver who answers, open their ride) and *Je conduis* (board of passenger requests, "Proposer une place"). |
 | `/groups` | **Groups** | Group cards (route, time, driver, members, fuel pool, your weekly share), join/leave with wallet debit, group chat, create-a-group dialog, summary counters. |
 | `/driver` | **Driver dashboard** | Earnings and counters, weekly gains chart, next ride with passenger manifest and **Valider la montée** PIN dialog, published rides, history. |
@@ -199,7 +199,7 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 11. **Manage money** on `/wallet`: **Recharger en cash** → choose 20 / 50 / 100 DH → **Générer mon code** → show the code and the cash at the BDE desk; the admin credits you. Track your points toward a free ride and join the **Cotisation essence** (30 DH/week, your share of the Groupe de Yasmine fuel pool).
 12. **Check your profile** at `/profile`: ride counters, **Ton impact** (DH saved, CO₂ avoided, time gained), preferred vibe, theme.
 13. **Notifications**: the bell in the header shows an unread counter; **Tout marquer comme lu** clears it.
-14. **Change theme** with the palette/moon button in the header (Tanger → ENSA → Nuit) or on the profile page.
+14. **Change theme** with the palette/moon button in the header (ENSA → Tanger → Nuit) or on the profile page. ENSA is the default; Tanger and Nuit are opt-in alternatives.
 
 ### D. Using the app (driver)
 
@@ -271,11 +271,11 @@ The rule is simple: **a Supabase session means database, no session means demo.*
 
 ## Themes and design system
 
-**"Billet de Tanger"**: cream paper, ink outlines, petit-taxi teal, saffron stamps, hard offset shadows, perforated ticket cards.
+**Default: ENSA institutional** — pale blue paper, navy ink, blue actions and amber accents. **Tanger** is the optional "Billet de Tanger" theme: cream paper, petit-taxi teal, saffron stamps, hard offset shadows and perforated ticket cards. **Nuit** is the optional dark theme.
 
 - Colour rule: **teal = actions, saffron = money/urgency, green = confirmations** (never a solid green button).
 - Fonts: Bricolage Grotesque (display), Instrument Sans (body), JetBrains Mono (labels).
-- Themes are CSS-variable blocks in `src/styles.css`: `:root` (Tanger), `.theme-ensa`, `.theme-nuit`. Text/background pairs are kept at WCAG AA contrast (4.5:1).
+- Themes are CSS-variable blocks in `src/styles.css`: `:root` (Tanger palette), `.theme-ensa` (default), `.theme-nuit`. Text/background pairs are kept at WCAG AA contrast (4.5:1).
 - Shared primitives in `src/components/ui.tsx`; the ticket-style `TripCard` is reused everywhere a ride is previewed.
 
 ---

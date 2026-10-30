@@ -6,8 +6,8 @@
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f1e3",
-  "theme_color": "#2a8f93",
+  "background_color": "#f1f6fa",
+  "theme_color": "#2a6aa8",
   "icons": [
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
     { "src": "/rkeb-app-icon.png", "sizes": "any", "type": "image/png", "purpose": "any" }

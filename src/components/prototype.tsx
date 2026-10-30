@@ -63,12 +63,12 @@ export function Avatar({ trip, size = "md" }: { trip: Pick<Trip, "initials" | "c
 
 const notifIcons: Record<NotifIcon, typeof Bell> = { booking: Ticket, flash: Zap, wallet: WalletCards, route: Car };
 
-const themeCycle: Theme[] = ["tanger", "ensa", "nuit"];
+const themeCycle: Theme[] = ["ensa", "tanger", "nuit"];
 const themeLabel: Record<Theme, string> = { tanger: "Tanger", ensa: "ENSA", nuit: "Nuit" };
 
 export function ThemeToggle() {
   const s = useStore();
-  const next = themeCycle[(themeCycle.indexOf(s.theme) + 1) % themeCycle.length] ?? "tanger";
+  const next = themeCycle[(themeCycle.indexOf(s.theme) + 1) % themeCycle.length] ?? "ensa";
   const Icon = s.theme === "nuit" ? Moon : Palette;
   return <button
     aria-label={`Thème ${themeLabel[s.theme]} : passer à ${themeLabel[next]}`}
@@ -76,7 +76,7 @@ export function ThemeToggle() {
     onClick={() => setStore(() => ({ theme: next }))}
     className="relative grid h-10 w-10 place-items-center rounded-full border-2 border-ink bg-card">
     <Icon size={17} />
-    {s.theme !== "tanger" && <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-ink bg-accent" />}
+    {s.theme !== "ensa" && <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-ink bg-accent" />}
   </button>;
 }
 

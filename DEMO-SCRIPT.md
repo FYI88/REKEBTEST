@@ -57,7 +57,7 @@ et « on passe au prototype ».
 
 ## Hors chrono — si la question tombe
 
-- **Couleurs ENSA** : icône palette dans le header (aussi `/profile` → **Thème** → **ENSA**) → toute l'app passe au bleu/ambre institutionnel, re-cliquer pour revenir à Tanger. Phrase : « version couleurs ENSA, activable si l'école préfère — la démo par défaut reste la nôtre ».
+- **Thèmes** : l'app démarre en couleurs institutionnelles ENSA (bleu/ambre). Icône palette dans le header ou `/profile` → **Thème** → **Tanger** pour voir l'ancienne palette Billet de Tanger, puis **Nuit** pour le mode sombre. ENSA reste le choix par défaut.
 
 ## Si ça casse
 
@@ -77,7 +77,7 @@ Pendant les essais avec l'APK sur téléphone, l'équipe a relevé trois points 
 
 Après installation de la nouvelle APK, refaire ces trois vérifications sur le téléphone et noter les résultats ici avant la présentation. La carte en direct nécessite une connexion Internet.
 
-### Test cycle 2 � fixes prompted by user and team phone feedback
+### Test cycle 2 � fixes prompted by user and team phone feedback
 
 Build observed problems into the presentation story: we tested the previous APK on a phone, other testers reported that fullscreen and offline detection did not behave as expected, and the route sketch felt less useful than a real map. We turned those reports into a new test cycle instead of assuming the browser preview represented Android correctly.
 

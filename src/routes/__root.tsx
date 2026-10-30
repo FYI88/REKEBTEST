@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Rkeb · Covoiturage étudiant ENSA Tanger" },
       { name: "description", content: "Covoiturage vérifié pour la communauté ENSA Tanger : même route, même école, 5 dirhams." },
-      { name: "theme-color", content: "#2a8f93" },
+      { name: "theme-color", content: "#2a6aa8" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -100,7 +100,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="fr">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: 'try{var t=JSON.parse(localStorage.getItem("rkeb-demo-state-v1")||"{}").theme;if(t==="ensa"||t==="nuit")document.documentElement.classList.add("theme-"+t)}catch(e){}' }} />
+        <script dangerouslySetInnerHTML={{ __html: 'try{var k="rkeb-demo-state-v1",m="rkeb-theme-default-v2",s=JSON.parse(localStorage.getItem(k)||"{}");if(localStorage.getItem(m)!=="1"){s.theme="ensa";localStorage.setItem(k,JSON.stringify(s));localStorage.setItem(m,"1")}var t=s.theme||"ensa";if(t==="ensa"||t==="nuit")document.documentElement.classList.add("theme-"+t)}catch(e){document.documentElement.classList.add("theme-ensa")}' }} />
         <HeadContent />
       </head>
       <body>

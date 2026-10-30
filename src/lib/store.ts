@@ -32,9 +32,10 @@ type State = {
 };
 
 const KEY = "rkeb-demo-state-v1";
+const THEME_DEFAULT_VERSION = "rkeb-theme-default-v2";
 
 const seed: State = {
-  role: "passager", balance: 35, points: 120, cotisation: false, published: 0, demoMode: true, theme: "tanger",
+  role: "passager", balance: 35, points: 120, cotisation: false, published: 0, demoMode: true, theme: "ensa",
   ambiance: "Musique", notifsRead: false, myRides: [], favorites: [], hiddenTrips: [], chats: {}, ledger: [], myRequests: [], acceptedRequests: [], joinedGroups: [], myGroups: [], reports: [], blocked: [], boarded: [], handledReports: [],
   bookings: [{ tripId: "7", pay: "wallet", pickup: "ENSA entrée principale", status: "terminé" }],
 };
@@ -42,10 +43,11 @@ const seed: State = {
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return seed;
-    const parsed = JSON.parse(raw) as Partial<State>;
-    if (typeof parsed.balance !== "number" || !Array.isArray(parsed.bookings)) return seed;
-    return { ...seed, ...parsed };
+    const parsed = raw ? (JSON.parse(raw) as Partial<State>) : {};
+    const loaded = typeof parsed.balance === "number" && Array.isArray(parsed.bookings)
+      ? { ...seed, ...parsed }
+      : seed;
+    return loaded;
   } catch {
     return seed;
   }
@@ -61,6 +63,17 @@ function save(s: State) {
 
 const canStore = typeof localStorage !== "undefined";
 let state: State = canStore ? load() : seed;
+if (canStore) {
+  try {
+    if (localStorage.getItem(THEME_DEFAULT_VERSION) !== "1") {
+      state = { ...state, theme: "ensa" };
+      localStorage.setItem(THEME_DEFAULT_VERSION, "1");
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+  } catch {
+    // ENSA still applies in memory if browser storage is unavailable.
+  }
+}
 const subs = new Set<() => void>();
 
 export function setStore(fn: (s: State) => Partial<State>) {
